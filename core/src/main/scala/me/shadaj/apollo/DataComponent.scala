@@ -11,8 +11,6 @@ case class ApolloDataObj(data: Option[js.Object], loading: Boolean, error: js.Ob
 
 object ApolloData {
   private val objReader = implicitly[Reader[ApolloDataObj]]
-  private val objWriter = implicitly[Writer[ApolloDataObj]]
-
   implicit def reader[T](implicit reader: Reader[T]): Reader[ApolloData[T]] = new Reader[ApolloData[T]] {
     override def read(o: js.Object, root: Boolean): ApolloData[T] = {
       val dataObj = objReader.read(o, root)
@@ -20,6 +18,7 @@ object ApolloData {
     }
   }
 
+  private val objWriter = implicitly[Writer[ApolloDataObj]]
   implicit def writer[T](implicit writer: Writer[T]): Writer[ApolloData[T]] = new Writer[ApolloData[T]] {
     override def write(o: ApolloData[T], root: Boolean): js.Object = {
       objWriter.write(ApolloDataObj(o.data.map(t => writer.write(t)), o.loading, o.error, o.networkStatus))

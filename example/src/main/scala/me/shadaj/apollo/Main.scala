@@ -1,43 +1,24 @@
 package me.shadaj.apollo
 
-import me.shadaj.simple.react.core.{Component, Reader, WithRaw}
-import me.shadaj.simple.react.core.fascade.{ComponentInstance, React, ReactDOM}
+import me.shadaj.simple.react.core.Component
+import me.shadaj.simple.react.core.fascade.{ComponentInstance, ReactDOM}
 
-import scala.scalajs.js.{JSApp, JSON}
-import org.scalajs.dom.{Event, document, html}
+import scala.scalajs.js.JSApp
+import org.scalajs.dom.document
 import me.shadaj.simple.react.core.html._
 
 import scala.scalajs.js
 import scala.scalajs.js.annotation.ScalaJSDefined
 
 object Main extends JSApp {
-  case class Hero(name: String, friends: js.Object)
+  case class HeroFriend(name: String, appearsIn: List[String])
+  case class Hero(name: String, friends: Vector[HeroFriend])
   case class Data(hero: Hero)
-
-  object Bar extends Component {
-    type Props = ApolloData[Data]
-    type State = Unit
-
-    @ScalaJSDefined
-    class Def extends Definition {
-      override def initialState: Unit = ()
-
-      override def render(): ComponentInstance = {
-        props.data.map { d =>
-          div(
-            h1(d.toString)
-          ): ComponentInstance
-        }.getOrElse(h1("loading!"))
-      }
-    }
-  }
 
   object Lol extends Component {
     type Props = ApolloData[Data]
     type State = Unit
 
-    implicit val reader = implicitly[Reader[ApolloData[Data]]]
-
     @ScalaJSDefined
     class Def extends Definition {
       override def initialState: Unit = ()
@@ -45,8 +26,7 @@ object Main extends JSApp {
       override def render(): ComponentInstance = {
         props.data.map { d =>
           div(
-            h1(d.toString),
-            BarWithData()
+            h3(d.hero.toString),
           ): ComponentInstance
         }.getOrElse(h1("loading!"))
       }
@@ -59,12 +39,12 @@ object Main extends JSApp {
       |    name
       |    friends {
       |       name
+      |       appearsIn
       |    }
       |  }
       |}""".stripMargin)
 
   lazy val LolWithData = graphql(query)(Lol)
-  lazy val BarWithData = graphql(query)(Bar)
 
   override def main(): Unit = {
     val container = document.createElement("div")
