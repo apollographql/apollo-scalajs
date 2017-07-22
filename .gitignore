@@ -1,0 +1,4 @@
+*.log
+target/
+project/project/
+.idea/
