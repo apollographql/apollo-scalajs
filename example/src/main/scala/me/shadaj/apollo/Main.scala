@@ -24,11 +24,13 @@ object Main extends JSApp {
       override def initialState: Unit = ()
 
       override def render(): ComponentInstance = {
-        props.data.map { d =>
+        props.data.fold[ComponentInstance](
+          h1("loading!")
+        ) { d =>
           div(
-            h3(d.hero.toString),
-          ): ComponentInstance
-        }.getOrElse(h1("loading!"))
+            h3(d.hero.toString)
+          )
+        }
       }
     }
   }
