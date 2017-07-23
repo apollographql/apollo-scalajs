@@ -1,22 +1,28 @@
 package me.shadaj.apollo
 
-import me.shadaj.simple.react.core.fascade.ComponentInstance
-import me.shadaj.simple.react.core.{Component, ExternalComponent, Writer}
+import me.shadaj.simple.react.core.{ExternalComponent, ObjectOrWritten, Writer}
 
 import scala.scalajs.js
 import scala.scalajs.js.annotation.JSImport
+
+case class ApolloClientOptions(networkInterface: Option[NetworkInterface] = None)
+case class NetworkInterfaceOptions(uri: Option[String] = None)
+
+@js.native
+trait Query extends js.Object
 
 @js.native
 @JSImport("react-apollo", JSImport.Namespace)
 object ReactApolloFascade extends js.Object {
   @js.native
-  class ApolloClient(options: js.UndefOr[js.Dynamic] = js.undefined) extends js.Object
+  class ApolloClient(options: js.UndefOr[ObjectOrWritten[ApolloClientOptions]] = js.undefined) extends js.Object
 
-  def createNetworkInterface(options: js.Dynamic): NetworkInterface = js.native
+  def createNetworkInterface(options: js.UndefOr[ObjectOrWritten[NetworkInterfaceOptions]]): NetworkInterface = js.native
 
-  def gql(query: String): js.Object = js.native
+  def gql(query: String): Query = js.native
 
-  def graphql(query: js.Object): js.Function1[js.Any, js.Object] = js.native
+  def graphql(query: Query): js.Function1[js.Any, js.Object] = js.native
+  def graphql(query: Query, options: js.Object): js.Function1[js.Any, js.Object] = js.native
 }
 
 @js.native

@@ -20,7 +20,7 @@ object Main extends JSApp {
     type State = Unit
 
     @ScalaJSDefined
-    class Def extends Definition {
+    class Def(jsProps: js.Object) extends Definition(jsProps) {
       override def initialState: Unit = ()
 
       override def render(): ComponentInstance = {
@@ -50,12 +50,10 @@ object Main extends JSApp {
     val container = document.createElement("div")
     document.body.appendChild(container)
 
-    val ni = createNetworkInterface(js.Dynamic.literal(
-      "uri" -> "https://mpjk0plp9.lp.gql.zone/graphql"
-    ))
-
-    val client = new ApolloClient(js.Dynamic.literal(
-      "networkInterface" -> ni
+    val client = ApolloClient(ApolloClientOptions(
+      networkInterface = Some(createNetworkInterface(NetworkInterfaceOptions(
+        uri = Some("https://mpjk0plp9.lp.gql.zone/graphql")
+      )))
     ))
 
     ReactDOM.render(

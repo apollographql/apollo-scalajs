@@ -31,5 +31,5 @@ class DataComponent(comp: js.Object) extends ExternalComponent {
 
   override val component: js.Object = comp
 
-  def apply(): ComponentInstance = this.apply(())
+  def apply(): ComponentInstance = this.apply(())()
 }
