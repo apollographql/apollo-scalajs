@@ -1,0 +1,7 @@
+mutation UpVote {
+  upvotePost(postId: 1) {
+    id
+    title
+    votes
+  }
+}

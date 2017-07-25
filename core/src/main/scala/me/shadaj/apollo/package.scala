@@ -20,19 +20,45 @@ package object apollo {
 
   def gql(query: String): Query = ReactApolloFascade.gql(query)
 
-  def graphql[P](query: Query)(comp: Component)(implicit ev: ApolloData[P] =:= comp.Props,
-                                                constructorTag: ConstructorTag[comp.Def],
-                                                writer: Writer[comp.Props], reader: Reader[P]): DataComponent = {
-    new DataComponent(ReactApolloFascade.graphql(query, js.Dynamic.literal(
+  def graphql[D, E](query: Query)(comp: Component)(implicit ev: ApolloQueryProps[D, E] =:= comp.Props,
+                                                   constructorTag: ConstructorTag[comp.Def],
+                                                   writer: Writer[D], reader: Reader[D],
+                                                   extraReader: Reader[E], extraWriter: Writer[E]): DataComponent[E] = {
+    val dataWriter = implicitly[Writer[ApolloQueryProps[D, E]]]
+    new DataComponent[E](ReactApolloFascade.graphql(query, js.Dynamic.literal(
       "props" -> ((obj: js.Object) => {
         val dyn = obj.asInstanceOf[js.Dynamic]
-        writer.write(ApolloData[P](
-          Try(reader.read(dyn.data.asInstanceOf[js.Object])).toOption,
+        val networkStatus = dyn.data.networkStatus.asInstanceOf[Int]
+        dataWriter.write(ApolloQueryProps[D, E](
+          if (networkStatus == 1) None else Some(reader.read(dyn.data.asInstanceOf[js.Object])),
           dyn.data.loading.asInstanceOf[Boolean],
           dyn.data.error.asInstanceOf[js.Object],
-          dyn.data.networkStatus.asInstanceOf[Int]
+          networkStatus,
+          dyn.data.refetch.asInstanceOf[js.Function1[Unit, js.Promise[js.Object]]],
+          extraReader.read(obj, true)
         ))
       })
     ))(comp.componentReference))
+  }
+
+  def graphqlMutation[D, V, E](query: Query)(comp: Component)(implicit ev: ApolloMutationProps[V, E] =:= comp.Props,
+                                                              constructorTag: ConstructorTag[comp.Def],
+                                                              writer: Writer[D], reader: Reader[D],
+                                                              variablesWriter: Writer[V], variablesReader: Reader[V]): DataComponent[E] = {
+    new DataComponent[E](ReactApolloFascade.graphql(query)(comp.componentReference))
+  }
+
+  def graphql[E](query: GraphQLQuery)(comp: Component)(implicit ev: ApolloQueryProps[query.Data, E] =:= comp.Props,
+                                                       constructorTag: ConstructorTag[comp.Def],
+                                                       writer: Writer[query.Data], reader: Reader[query.Data],
+                                                       extraReader: Reader[E], extraWriter: Writer[E]): DataComponent[E] = {
+    graphql[query.Data, E](query.operation)(comp)
+  }
+
+  def graphql[E](query: GraphQLMutation)(comp: Component)(implicit ev: ApolloMutationProps[query.Variables, E] =:= comp.Props,
+                                                          constructorTag: ConstructorTag[comp.Def],
+                                                          writer: Writer[query.Data], reader: Reader[query.Data],
+                                                          variablesWriter: Writer[query.Variables], variablesReader: Reader[query.Variables]): DataComponent[E] = {
+    graphqlMutation[query.Data, query.Variables, E](query.operation)(comp)
   }
 }
