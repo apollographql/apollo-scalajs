@@ -1,6 +1,6 @@
 package me.shadaj.apollo
 
-import me.shadaj.simple.react.core.{Component, Reader}
+import me.shadaj.simple.react.core.{BuildingComponent, Component, Reader}
 import me.shadaj.simple.react.core.facade.{ComponentInstance, ReactDOM}
 
 import scala.scalajs.js.JSApp
@@ -9,7 +9,6 @@ import me.shadaj.simple.react.core.html._
 
 import scala.scalajs.js
 import scala.scalajs.js.annotation.ScalaJSDefined
-
 import scala.concurrent.ExecutionContext.Implicits.global
 
 object Main extends JSApp {
@@ -32,7 +31,7 @@ object Main extends JSApp {
     }
   }
 
-  lazy val UpVoteWithData = graphql[UpVote.ExtraProps](UpVoteMutation)(UpVote)
+  lazy val UpVoteWithData = graphql(UpVoteMutation)(UpVote)
 
   object PostsView extends Component {
     type Props = AllPostsQuery.Props
@@ -48,7 +47,7 @@ object Main extends JSApp {
         ) { d =>
           div(
             d.posts.map { posts =>
-              posts.flatten.toSeq.map { post =>
+              posts.flatten.map { post =>
                 div(
                   h1(post.title.getOrElse[String]("???")),
                   h2(post.votes.getOrElse(0).toString)
@@ -57,7 +56,7 @@ object Main extends JSApp {
             },
             UpVoteWithData(UpVote.ExtraProps((_) => {
 //              props.refetch(())
-            }))()
+            }))
           )
         }
       }
@@ -77,7 +76,7 @@ object Main extends JSApp {
     ))
 
     ReactDOM.render(
-      ApolloProvider(ApolloProvider.Props(client))(
+      ApolloProvider(ApolloProvider.Props(client)).withChildren(
         div(
           PostsViewWithData()
         )

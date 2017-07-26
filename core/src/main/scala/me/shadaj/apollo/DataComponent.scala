@@ -5,7 +5,12 @@ import me.shadaj.simple.react.core.facade.ComponentInstance
 
 import scala.scalajs.js
 
-case class ApolloQueryProps[T, E](data: Option[T], loading: Boolean, error: js.Object, networkStatus: Int, refetch: js.Function1[Unit, js.Promise[js.Object]], extraProps: E) {
+trait ApolloProps {
+  type ExtraProps
+}
+
+case class ApolloQueryProps[T, E](data: Option[T], loading: Boolean, error: js.Object, networkStatus: Int, refetch: js.Function1[Unit, js.Promise[js.Object]], extraProps: E) extends ApolloProps {
+  override type ExtraProps = E
   type WithExtra[NE] = ApolloQueryProps[T, NE]
 }
 case class ApolloQueryPropsObj(data: Option[js.Object], loading: Boolean, error: js.Object, networkStatus: Int, refetch: js.Function1[Unit, js.Promise[js.Object]])
@@ -33,7 +38,8 @@ object ApolloQueryProps {
   }
 }
 
-case class ApolloMutationProps[V, E](mutate: V => js.Promise[js.Object], extraProps: E) {
+case class ApolloMutationProps[V, E](mutate: V => js.Promise[js.Object], extraProps: E) extends ApolloProps {
+  override type ExtraProps = E
   type WithExtra[NE] = ApolloMutationProps[V, NE]
 }
 case class ApolloMutationPropsObj(mutate: js.Object)
@@ -60,8 +66,8 @@ object ApolloMutationProps {
   }
 }
 
-class DataComponent[E](comp: js.Object) extends ExternalComponent {
-  type Props = E
+class DataComponent[P <: ApolloProps](comp: js.Object) extends ExternalComponent {
+  type Props = P#ExtraProps
 
   override val component: js.Object = comp
 }
