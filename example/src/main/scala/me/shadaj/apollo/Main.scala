@@ -1,11 +1,12 @@
 package me.shadaj.apollo
 
-import me.shadaj.simple.react.core.{BuildingComponent, Component, Reader}
-import me.shadaj.simple.react.core.facade.{ComponentInstance, ReactDOM}
+import me.shadaj.slinky.core.Component
+import me.shadaj.slinky.core.facade.{ComponentInstance, ReactDOM}
+import me.shadaj.slinky.core.html._
 
 import scala.scalajs.js.JSApp
 import org.scalajs.dom.document
-import me.shadaj.simple.react.core.html._
+
 
 import scala.scalajs.js
 import scala.scalajs.js.annotation.ScalaJSDefined
@@ -46,13 +47,11 @@ object Main extends JSApp {
           h1("loading!")
         ) { d =>
           div(
-            d.posts.map { posts =>
-              posts.flatten.map { post =>
-                div(
-                  h1(post.title.getOrElse[String]("???")),
-                  h2(post.votes.getOrElse(0).toString)
-                )
-              }: HtmlComponentMod[divAttributeApplied]
+            d.posts.toList.flatten.flatten.zipWithIndex.map { case (post, i) =>
+              div(key := i.toString)(
+                h1(post.title.getOrElse[String]("???")),
+                h2(post.votes.getOrElse(0).toString)
+              )
             },
             UpVoteWithData(UpVote.ExtraProps((_) => {
 //              props.refetch(())
@@ -78,7 +77,7 @@ object Main extends JSApp {
     ReactDOM.render(
       ApolloProvider(ApolloProvider.Props(client)).withChildren(
         div(
-          PostsViewWithData()
+          PostsViewWithData(())
         )
       ),
       container

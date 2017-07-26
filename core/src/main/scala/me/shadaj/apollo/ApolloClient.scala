@@ -1,6 +1,6 @@
 package me.shadaj.apollo
 
-import me.shadaj.simple.react.core.{ExternalComponent, ObjectOrWritten, Writer}
+import me.shadaj.slinky.core.{ExternalComponent, ObjectOrWritten, Writer}
 
 import scala.scalajs.js
 import scala.scalajs.js.annotation.JSImport

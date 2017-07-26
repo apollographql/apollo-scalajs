@@ -1,6 +1,6 @@
 package me.shadaj
 
-import me.shadaj.simple.react.core.{Component, ObjectOrWritten, Reader, Writer}
+import me.shadaj.slinky.core.{Component, ObjectOrWritten, Reader, Writer}
 
 import scala.scalajs.js
 import scala.scalajs.js.ConstructorTag
@@ -38,14 +38,14 @@ package object apollo {
           extraReader.read(obj, true)
         ))
       })
-    ))(comp.componentReference))
+    ))(comp.componentConstructor))
   }
 
   def graphqlMutation[D, V, E](query: Query)(comp: Component)(implicit ev: ApolloMutationProps[V, E] =:= comp.Props,
                                                               constructorTag: ConstructorTag[comp.Def],
                                                               writer: Writer[D], reader: Reader[D],
                                                               variablesWriter: Writer[V], variablesReader: Reader[V]): DataComponent[comp.Props with ApolloProps] = {
-    new DataComponent[comp.Props with ApolloProps](ReactApolloFascade.graphql(query)(comp.componentReference))
+    new DataComponent[comp.Props with ApolloProps](ReactApolloFascade.graphql(query)(comp.componentConstructor))
   }
 
   def graphql[E](query: GraphQLQuery)(comp: Component)(implicit ev: ApolloQueryProps[query.Data, E] =:= comp.Props,

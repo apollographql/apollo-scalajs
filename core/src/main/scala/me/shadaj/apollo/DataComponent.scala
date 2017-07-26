@@ -1,7 +1,7 @@
 package me.shadaj.apollo
 
-import me.shadaj.simple.react.core.{ExternalComponent, Reader, Writer}
-import me.shadaj.simple.react.core.facade.ComponentInstance
+import me.shadaj.slinky.core.{ExternalComponent, Reader, Writer}
+import me.shadaj.slinky.core.facade.ComponentInstance
 
 import scala.scalajs.js
 
