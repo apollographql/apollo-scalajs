@@ -1,36 +1,45 @@
 package me.shadaj.apollo
 
 import me.shadaj.slinky.core.{ExternalComponent, Reader, Writer}
-import me.shadaj.slinky.core.facade.ComponentInstance
+import scala.scalajs.concurrent.JSExecutionContext.Implicits.runNow
 
+import scala.concurrent.Future
 import scala.scalajs.js
+
+case class DataResult(data: js.Object)
 
 trait ApolloProps {
   type ExtraProps
 }
 
-case class ApolloQueryProps[T, E](data: Option[T], loading: Boolean, error: js.Object, networkStatus: Int, refetch: js.Function1[Unit, js.Promise[js.Object]], extraProps: E) extends ApolloProps {
+case class ApolloQueryProps[D, E](data: Option[D], loading: Boolean, error: js.Object, networkStatus: Int, refetch: Unit => Future[D], extraProps: E) extends ApolloProps {
   override type ExtraProps = E
-  type WithExtra[NE] = ApolloQueryProps[T, NE]
+  type WithExtra[NE] = ApolloQueryProps[D, NE]
 }
-case class ApolloQueryPropsObj(data: Option[js.Object], loading: Boolean, error: js.Object, networkStatus: Int, refetch: js.Function1[Unit, js.Promise[js.Object]])
+case class ApolloQueryPropsObj(data: Option[js.Object], loading: Boolean, error: js.Object, networkStatus: Int, refetch: js.Object)
 
 object ApolloQueryProps {
   private val objReader = implicitly[Reader[ApolloQueryPropsObj]]
-  implicit def reader[T, E](implicit reader: Reader[T],
-                            extraReader: Reader[E]): Reader[ApolloQueryProps[T, E]] = (o, root) => {
+  implicit def reader[D, E](implicit reader: Reader[D],
+                            extraReader: Reader[E]): Reader[ApolloQueryProps[D, E]] = (o, root) => {
     val dataObj = objReader.read(o, root)
-    ApolloQueryProps[T, E](
-      dataObj.data.map(d => reader.read(d)), dataObj.loading, dataObj.error, dataObj.networkStatus, dataObj.refetch,
+    val refetchData = implicitly[Reader[Unit => Future[DataResult]]].read(dataObj.refetch)
+    ApolloQueryProps[D, E](
+      dataObj.data.map(d => reader.read(d)), dataObj.loading, dataObj.error, dataObj.networkStatus,
+      _ => refetchData().map(d => reader.read(d.data)),
       extraReader.read(o, root)
     )
   }
 
   private val objWriter = implicitly[Writer[ApolloQueryPropsObj]]
-  implicit def writer[T, E](implicit writer: Writer[T],
-                            extraWriter: Writer[E]): Writer[ApolloQueryProps[T, E]] = (o, root: Boolean) => {
+  implicit def writer[D, E](implicit writer: Writer[D],
+                            extraWriter: Writer[E]): Writer[ApolloQueryProps[D, E]] = (o, root: Boolean) => {
     val extra = extraWriter.write(o.extraProps, root)
-    val normal = objWriter.write(ApolloQueryPropsObj(o.data.map(t => writer.write(t)), o.loading, o.error, o.networkStatus, o.refetch), root)
+    val normal = objWriter.write(ApolloQueryPropsObj(
+      o.data.map(t => writer.write(t)),
+      o.loading, o.error, o.networkStatus,
+      implicitly[Writer[Unit => Future[DataResult]]].write(_ => o.refetch().map(d => DataResult(writer.write(d))))
+    ), root)
 
     js.Dynamic.global.Object.assign(normal, extra)
 
@@ -38,26 +47,32 @@ object ApolloQueryProps {
   }
 }
 
-case class ApolloMutationProps[V, E](mutate: V => js.Promise[js.Object], extraProps: E) extends ApolloProps {
+case class ApolloMutationProps[V, D, E](mutate: V => Future[D], extraProps: E) extends ApolloProps {
   override type ExtraProps = E
-  type WithExtra[NE] = ApolloMutationProps[V, NE]
+  type WithExtra[NE] = ApolloMutationProps[V, D, NE]
 }
 case class ApolloMutationPropsObj(mutate: js.Object)
 
 object ApolloMutationProps {
   private val objReader = implicitly[Reader[ApolloMutationPropsObj]]
-  implicit def reader[V, E](implicit variablesWriter: Writer[V],
-                            extraReader: Reader[E]): Reader[ApolloMutationProps[V, E]] = (o, root) => {
+  implicit def reader[V, D, E](implicit variablesWriter: Writer[V],
+                               extraReader: Reader[E],
+                               dataReader: Reader[D]): Reader[ApolloMutationProps[V, D, E]] = (o, root) => {
     val dataObj = objReader.read(o, root)
-    ApolloMutationProps(implicitly[Reader[V => js.Promise[js.Object]]].read(dataObj.mutate), extraReader.read(o, root))
+    val dataMutate = implicitly[Reader[V => Future[DataResult]]].read(dataObj.mutate)
+    ApolloMutationProps(
+      v => dataMutate(v).map(d => dataReader.read(d.data)),
+      extraReader.read(o, root)
+    )
   }
 
   private val objWriter = implicitly[Writer[ApolloMutationPropsObj]]
-  implicit def writer[V, E](implicit variablesReader: Reader[V],
-                            extraWriter: Writer[E]): Writer[ApolloMutationProps[V, E]] = (o, root: Boolean) => {
+  implicit def writer[V, D, E](implicit variablesReader: Reader[V],
+                               extraWriter: Writer[E],
+                               dataWriter: Writer[D]): Writer[ApolloMutationProps[V, D, E]] = (o, root: Boolean) => {
     val extra = extraWriter.write(o.extraProps, root)
     val normal = objWriter.write(ApolloMutationPropsObj(
-      implicitly[Writer[V => js.Promise[js.Object]]].write(o.mutate)
+      implicitly[Writer[V => Future[DataResult]]].write(v => o.mutate(v).map(d => DataResult(dataWriter.write(d))))
     ), root)
 
     js.Dynamic.global.Object.assign(normal, extra)

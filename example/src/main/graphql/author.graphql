@@ -1,0 +1,6 @@
+query Author($id: Int!) {
+  author(id: $id) {
+    firstName
+    lastName
+  }
+}

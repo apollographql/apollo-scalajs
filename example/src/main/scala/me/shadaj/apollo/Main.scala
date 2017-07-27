@@ -24,7 +24,8 @@ object Main extends JSApp {
 
       override def render(): ComponentInstance = {
         button(onClick := (_ => {
-          props.mutate(()).toFuture.foreach(v => {
+          props.mutate(()).foreach(v => {
+            println(v)
             props.extraProps.update(())
           })
         }))
@@ -64,6 +65,31 @@ object Main extends JSApp {
 
   lazy val PostsViewWithData = graphql(AllPostsQuery)(PostsView)
 
+  object AuthorView extends Component {
+    case class ExtraProps(id: Int)
+    type Props = AuthorQuery.Props#WithExtra[ExtraProps]
+    type State = Unit
+
+    @ScalaJSDefined
+    class Def(jsProps: js.Object) extends Definition(jsProps) {
+      override def initialState: Unit = ()
+
+      override def render(): ComponentInstance = {
+        props.data.fold[ComponentInstance](
+          h1("loading!")
+        ) { d =>
+          div(
+            d.author.toString
+          )
+        }
+      }
+    }
+  }
+
+  lazy val AuthorViewWithData = graphqlWithVariables(
+    AuthorQuery
+  )((e: AuthorView.ExtraProps) => Some(AuthorQuery.Variables(e.id)))(AuthorView)
+
   override def main(): Unit = {
     val container = document.createElement("div")
     document.body.appendChild(container)
@@ -77,7 +103,8 @@ object Main extends JSApp {
     ReactDOM.render(
       ApolloProvider(ApolloProvider.Props(client)).withChildren(
         div(
-          PostsViewWithData(())
+          PostsViewWithData(()),
+          AuthorViewWithData(AuthorView.ExtraProps(1))
         )
       ),
       container
