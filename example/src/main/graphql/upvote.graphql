@@ -1,5 +1,5 @@
-mutation UpVote {
-  upvotePost(postId: 1) {
+mutation UpVote($postId: Int!) {
+  upvotePost(postId: $postId) {
     id
     title
     votes
