@@ -1,4 +1,4 @@
-package me.shadaj.apollo
+package com.apollographql.scalajs
 
 import me.shadaj.slinky.core.{ExternalComponent, Reader, Writer}
 import scala.scalajs.concurrent.JSExecutionContext.Implicits.runNow

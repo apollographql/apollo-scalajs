@@ -1,4 +1,4 @@
-package me.shadaj.apollo
+package com.apollographql.scalajs
 
 import me.shadaj.slinky.core.Component
 import me.shadaj.slinky.core.facade.ComponentInstance

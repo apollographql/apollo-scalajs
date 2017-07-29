@@ -1,4 +1,4 @@
-package me.shadaj
+package com.apollographql
 
 import me.shadaj.slinky.core.{Component, ObjectOrWritten, Reader, Writer}
 
@@ -7,7 +7,7 @@ import scala.scalajs.js.{ConstructorTag, JSON}
 import scala.concurrent.Future
 import scala.scalajs.concurrent.JSExecutionContext.Implicits.runNow
 
-package object apollo {
+package object scalajs {
   type ApolloClient = ReactApolloFascade.ApolloClient
   object ApolloClient {
     // WHY INTELLIJ WHY

@@ -1,6 +1,6 @@
-package me.shadaj.apollo
+package com.apollographql.scalajs
 
-import me.shadaj.slinky.core.{ExternalComponent, ObjectOrWritten, Writer}
+import me.shadaj.slinky.core.{ExternalComponent, ObjectOrWritten}
 
 import scala.scalajs.js
 import scala.scalajs.js.annotation.JSImport

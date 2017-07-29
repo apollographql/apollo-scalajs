@@ -1,4 +1,4 @@
-organization in ThisBuild := "me.shadaj"
+organization in ThisBuild := "com.apollographql"
 
 version in ThisBuild := "0.1.0-SNAPSHOT"
 

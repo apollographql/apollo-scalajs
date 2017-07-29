@@ -10,7 +10,7 @@ npmDependencies in Compile += "react-apollo" -> "1.4.8"
 
 scalaJSUseMainModuleInitializer := true
 
-val namespace = "me.shadaj.apollo"
+val namespace = "com.apollographql.scalajs"
 
 (sourceGenerators in Compile) += Def.task {
   import scala.sys.process._

@@ -1,4 +1,4 @@
-package me.shadaj.apollo
+package com.apollographql.scalajs
 
 trait GraphQLQuery {
   val operation: Query
