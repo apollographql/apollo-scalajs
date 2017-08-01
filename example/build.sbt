@@ -28,3 +28,5 @@ val namespace = "com.apollographql.scalajs"
   ).!
   Seq(out / "graphql.scala")
 }
+
+watchSources ++= ((sourceDirectory in Compile).value / "graphql" ** "*.graphql").get
