@@ -10,6 +10,15 @@ npmDependencies in Compile += "react-apollo" -> "1.4.8"
 
 scalaJSUseMainModuleInitializer := true
 
+npmDependencies in Compile += "react-proxy" -> "1.1.8"
+
+webpackConfigFile in fastOptJS := Some(baseDirectory.value / "webpack-fastopt.config.js")
+webpackConfigFile in fullOptJS := Some(baseDirectory.value / "webpack-opt.config.js")
+
+emitSourceMaps := false
+
+webpackDevServerExtraArgs := Seq("--inline", "--hot")
+
 val namespace = "com.apollographql.scalajs"
 
 (sourceGenerators in Compile) += Def.task {

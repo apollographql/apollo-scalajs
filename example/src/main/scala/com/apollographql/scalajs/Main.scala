@@ -4,12 +4,16 @@ import me.shadaj.slinky.core.facade.ReactDOM
 import me.shadaj.slinky.core.html._
 
 import scala.scalajs.js.JSApp
-import org.scalajs.dom.document
+import org.scalajs.dom.{document, html}
+
+import scala.scalajs.js
 
 object Main extends JSApp {
   override def main(): Unit = {
-    val container = document.createElement("div")
-    document.body.appendChild(container)
+    if (js.Dynamic.global.reactContainer == js.undefined) {
+      js.Dynamic.global.reactContainer = document.createElement("div")
+      document.body.appendChild(js.Dynamic.global.reactContainer.asInstanceOf[html.Element])
+    }
 
     val client = ApolloClient(ApolloClientOptions(
       networkInterface = Some(createNetworkInterface(NetworkInterfaceOptions(
@@ -24,7 +28,7 @@ object Main extends JSApp {
           AuthorView.WithData(AuthorView.ExtraProps(1))
         )
       ),
-      container
+      js.Dynamic.global.reactContainer.asInstanceOf[html.Element]
     )
   }
 }
