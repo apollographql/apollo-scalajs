@@ -15,16 +15,16 @@ package object scalajs {
   }
 
   // WHY INTELLIJ WHY
-  def createNetworkInterface[O](options: O = js.undefined)(implicit ev: O => js.UndefOr[ObjectOrWritten[NetworkInterfaceOptions]]): NetworkInterface = {
+  def createNetworkInterface[O](options: O = js.undefined)
+                               (implicit ev: O => js.UndefOr[ObjectOrWritten[NetworkInterfaceOptions]]): NetworkInterface = {
     ReactApolloFascade.createNetworkInterface(ev(options))
   }
 
   def gql(query: String): Query = ReactApolloFascade.gql(query)
 
   def graphql[D, V, E](query: Query, variables: E => Option[V])
-                      (comp: Component)
-                      (implicit ev: ApolloQueryProps[D, E] =:= comp.Props,
-                       constructorTag: ConstructorTag[comp.Def],
+                      (comp: Component { type Props = ApolloQueryProps[D, E] })
+                      (implicit constructorTag: ConstructorTag[comp.Def],
                        writer: Writer[D], reader: Reader[D],
                        variablesWriter: Writer[V], variablesReader: Reader[V],
                        extraReader: Reader[E], extraWriter: Writer[E]): DataComponent[comp.Props with ApolloProps] = {
@@ -53,17 +53,17 @@ package object scalajs {
     ))(comp.componentConstructor))
   }
 
-  def graphqlMutation[D, V, E](query: Query)(comp: Component)(implicit ev: ApolloMutationProps[V, D, E] =:= comp.Props,
-                                                              constructorTag: ConstructorTag[comp.Def],
-                                                              writer: Writer[D], reader: Reader[D],
-                                                              variablesWriter: Writer[V], variablesReader: Reader[V]): DataComponent[comp.Props with ApolloProps] = {
+  def graphqlMutation[D, V, E](query: Query)
+                              (comp: Component { type Props = ApolloMutationProps[V, D, E] })
+                              (implicit constructorTag: ConstructorTag[comp.Def],
+                               writer: Writer[D], reader: Reader[D],
+                               variablesWriter: Writer[V], variablesReader: Reader[V]): DataComponent[comp.Props with ApolloProps] = {
     new DataComponent[comp.Props with ApolloProps](ReactApolloFascade.graphql(query)(comp.componentConstructor))
   }
 
   def graphql[E](query: GraphQLQuery)
-                (comp: Component)
-                (implicit ev: ApolloQueryProps[query.Data, E] =:= comp.Props,
-                 constructorTag: ConstructorTag[comp.Def],
+                (comp: Component { type Props = ApolloQueryProps[query.Data, E] })
+                (implicit constructorTag: ConstructorTag[comp.Def],
                  writer: Writer[query.Data], reader: Reader[query.Data],
                  variablesWriter: Writer[query.Variables], variablesReader: Reader[query.Variables],
                  extraReader: Reader[E], extraWriter: Writer[E]): DataComponent[comp.Props with ApolloProps] = {
@@ -71,19 +71,20 @@ package object scalajs {
   }
 
   def graphqlWithVariables[E](query: GraphQLQuery)
-                             (variables: E => Option[query.Variables])(comp: Component)
-                (implicit ev: ApolloQueryProps[query.Data, E] =:= comp.Props,
-                 constructorTag: ConstructorTag[comp.Def],
-                 writer: Writer[query.Data], reader: Reader[query.Data],
-                 variablesWriter: Writer[query.Variables], variablesReader: Reader[query.Variables],
-                 extraReader: Reader[E], extraWriter: Writer[E]): DataComponent[comp.Props with ApolloProps] = {
+                             (variables: E => Option[query.Variables])
+                             (comp: Component { type Props = ApolloQueryProps[query.Data, E] })
+                             (implicit constructorTag: ConstructorTag[comp.Def],
+                              writer: Writer[query.Data], reader: Reader[query.Data],
+                              variablesWriter: Writer[query.Variables], variablesReader: Reader[query.Variables],
+                              extraReader: Reader[E], extraWriter: Writer[E]): DataComponent[comp.Props with ApolloProps] = {
     graphql[query.Data, query.Variables, E](query.operation, variables)(comp)
   }
 
-  def graphql[E](query: GraphQLMutation)(comp: Component)(implicit ev: ApolloMutationProps[query.Variables, query.Data, E] =:= comp.Props,
-                                                          constructorTag: ConstructorTag[comp.Def],
-                                                          writer: Writer[query.Data], reader: Reader[query.Data],
-                                                          variablesWriter: Writer[query.Variables], variablesReader: Reader[query.Variables]): DataComponent[comp.Props with ApolloProps] = {
+  def graphql[E](query: GraphQLMutation)
+                (comp: Component { type Props = ApolloMutationProps[query.Variables, query.Data, E]})
+                (implicit constructorTag: ConstructorTag[comp.Def],
+                 writer: Writer[query.Data], reader: Reader[query.Data],
+                 variablesWriter: Writer[query.Variables], variablesReader: Reader[query.Variables]): DataComponent[comp.Props with ApolloProps] = {
     graphqlMutation[query.Data, query.Variables, E](query.operation)(comp)
   }
 }
