@@ -35,5 +35,5 @@ object ApolloProvider extends ExternalComponent {
   @JSImport("react-apollo", "ApolloProvider")
   private object Comp extends js.Object
 
-  override val component: js.Object = Comp
+  override val component = Comp
 }

@@ -1,7 +1,7 @@
 package com.apollographql.scalajs
 
 import me.shadaj.slinky.core.{ExternalComponent, Reader, Writer}
-import scala.scalajs.concurrent.JSExecutionContext.Implicits.runNow
+import scala.scalajs.concurrent.JSExecutionContext.Implicits.queue
 
 import scala.concurrent.Future
 import scala.scalajs.js
@@ -84,5 +84,5 @@ object ApolloMutationProps {
 class DataComponent[P <: ApolloProps](comp: js.Object) extends ExternalComponent {
   type Props = P#ExtraProps
 
-  override val component: js.Object = comp
+  override val component = comp
 }

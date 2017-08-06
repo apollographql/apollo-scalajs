@@ -1,8 +1,8 @@
 package com.apollographql.scalajs
 
-import me.shadaj.slinky.core.Component
-import me.shadaj.slinky.core.facade.ComponentInstance
-import me.shadaj.slinky.core.html._
+import me.shadaj.slinky.core.{Component, TagComponent}
+import me.shadaj.slinky.core.facade.ReactElement
+import me.shadaj.slinky.web.html._
 
 import scala.scalajs.js
 import scala.scalajs.js.annotation.ScalaJSDefined
@@ -16,14 +16,12 @@ object AuthorView extends Component {
   class Def(jsProps: js.Object) extends Definition(jsProps) {
     override def initialState: Unit = ()
 
-    override def render(): ComponentInstance = {
-      props.data.fold[ComponentInstance](
-        h1("loading!")
-      ) { d =>
+    override def render(): ReactElement = {
+      props.data.map { d =>
         div(
           d.author.toString
         )
-      }
+      }.getOrElse[TagComponent[Any]](h1("loading!"))
     }
   }
 
