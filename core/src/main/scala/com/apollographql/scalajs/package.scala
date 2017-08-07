@@ -1,6 +1,6 @@
 package com.apollographql
 
-import me.shadaj.slinky.core.{Component, ObjectOrWritten, Reader, Writer}
+import me.shadaj.slinky.core._
 
 import scala.scalajs.js
 import scala.scalajs.js.{ConstructorTag, JSON}
@@ -23,7 +23,7 @@ package object scalajs {
   def gql(query: String): Query = ReactApolloFascade.gql(query)
 
   def graphql[D, V, E](query: Query, variables: E => Option[V])
-                      (comp: Component { type Props = ApolloQueryProps[D, E] })
+                      (comp: BaseComponent { type Props = ApolloQueryProps[D, E] })
                       (implicit constructorTag: ConstructorTag[comp.Def],
                        writer: Writer[D], reader: Reader[D],
                        variablesWriter: Writer[V], variablesReader: Reader[V],
@@ -54,7 +54,7 @@ package object scalajs {
   }
 
   def graphqlMutation[D, V, E](query: Query)
-                              (comp: Component { type Props = ApolloMutationProps[V, D, E] })
+                              (comp: BaseComponent { type Props = ApolloMutationProps[V, D, E] })
                               (implicit constructorTag: ConstructorTag[comp.Def],
                                writer: Writer[D], reader: Reader[D],
                                variablesWriter: Writer[V], variablesReader: Reader[V]): DataComponent[comp.Props with ApolloProps] = {
@@ -62,7 +62,7 @@ package object scalajs {
   }
 
   def graphql[E](query: GraphQLQuery)
-                (comp: Component { type Props = ApolloQueryProps[query.Data, E] })
+                (comp: BaseComponent { type Props = ApolloQueryProps[query.Data, E] })
                 (implicit constructorTag: ConstructorTag[comp.Def],
                  writer: Writer[query.Data], reader: Reader[query.Data],
                  variablesWriter: Writer[query.Variables], variablesReader: Reader[query.Variables],
@@ -72,7 +72,7 @@ package object scalajs {
 
   def graphqlWithVariables[E](query: GraphQLQuery)
                              (variables: E => Option[query.Variables])
-                             (comp: Component { type Props = ApolloQueryProps[query.Data, E] })
+                             (comp: BaseComponent { type Props = ApolloQueryProps[query.Data, E] })
                              (implicit constructorTag: ConstructorTag[comp.Def],
                               writer: Writer[query.Data], reader: Reader[query.Data],
                               variablesWriter: Writer[query.Variables], variablesReader: Reader[query.Variables],
@@ -81,7 +81,7 @@ package object scalajs {
   }
 
   def graphql[E](query: GraphQLMutation)
-                (comp: Component { type Props = ApolloMutationProps[query.Variables, query.Data, E]})
+                (comp: BaseComponent { type Props = ApolloMutationProps[query.Variables, query.Data, E]})
                 (implicit constructorTag: ConstructorTag[comp.Def],
                  writer: Writer[query.Data], reader: Reader[query.Data],
                  variablesWriter: Writer[query.Variables], variablesReader: Reader[query.Variables]): DataComponent[comp.Props with ApolloProps] = {
