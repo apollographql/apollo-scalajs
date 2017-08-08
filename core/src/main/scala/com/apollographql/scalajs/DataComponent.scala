@@ -12,7 +12,7 @@ trait ApolloProps {
   type ExtraProps
 }
 
-case class ApolloQueryProps[D, E](data: Option[D], loading: Boolean, error: js.Object, networkStatus: Int, refetch: Unit => Future[D], extraProps: E) extends ApolloProps {
+case class ApolloQueryProps[D, E](data: Option[D], loading: Boolean, error: js.Object, networkStatus: Int, refetch: () => Future[D], extraProps: E) extends ApolloProps {
   override type ExtraProps = E
   type WithExtra[NE] = ApolloQueryProps[D, NE]
 }
@@ -23,10 +23,10 @@ object ApolloQueryProps {
   implicit def reader[D, E](implicit reader: Reader[D],
                             extraReader: Reader[E]): Reader[ApolloQueryProps[D, E]] = (o, root) => {
     val dataObj = objReader.read(o, root)
-    val refetchData = implicitly[Reader[Unit => Future[DataResult]]].read(dataObj.refetch)
+    val refetchData = implicitly[Reader[() => Future[DataResult]]].read(dataObj.refetch)
     ApolloQueryProps[D, E](
       dataObj.data.map(d => reader.read(d)), dataObj.loading, dataObj.error, dataObj.networkStatus,
-      _ => refetchData().map(d => reader.read(d.data)),
+      () => refetchData().map(d => reader.read(d.data)),
       extraReader.read(o, root)
     )
   }
@@ -38,7 +38,7 @@ object ApolloQueryProps {
     val normal = objWriter.write(ApolloQueryPropsObj(
       o.data.map(t => writer.write(t)),
       o.loading, o.error, o.networkStatus,
-      implicitly[Writer[Unit => Future[DataResult]]].write(_ => o.refetch().map(d => DataResult(writer.write(d))))
+      implicitly[Writer[() => Future[DataResult]]].write(() => o.refetch().map(d => DataResult(writer.write(d))))
     ), root)
 
     js.Dynamic.global.Object.assign(normal, extra)

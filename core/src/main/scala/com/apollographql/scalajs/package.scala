@@ -5,7 +5,7 @@ import me.shadaj.slinky.core._
 import scala.scalajs.js
 import scala.scalajs.js.{ConstructorTag, JSON}
 import scala.concurrent.Future
-import scala.scalajs.concurrent.JSExecutionContext.Implicits.runNow
+import scala.scalajs.concurrent.JSExecutionContext.Implicits.queue
 
 package object scalajs {
   type ApolloClient = ReactApolloFascade.ApolloClient
@@ -34,13 +34,13 @@ package object scalajs {
       "props" -> ((obj: js.Object) => {
         val dyn = obj.asInstanceOf[js.Dynamic]
         val networkStatus = dyn.data.networkStatus.asInstanceOf[Int]
-        val refetchData = implicitly[Reader[Unit => Future[DataResult]]].read(dyn.data.refetch.asInstanceOf[js.Object])
+        val refetchData = implicitly[Reader[() => Future[DataResult]]].read(dyn.data.refetch.asInstanceOf[js.Object])
         dataWriter.write(ApolloQueryProps[D, E](
           if (networkStatus == 1) None else Some(reader.read(dyn.data.asInstanceOf[js.Object])),
           dyn.data.loading.asInstanceOf[Boolean],
           dyn.data.error.asInstanceOf[js.Object],
           networkStatus,
-          _ => refetchData().map(d => reader.read(d.data)),
+          () => refetchData().map(d => reader.read(d.data)),
           extraReader.read(dyn.ownProps.asInstanceOf[js.Object], true)
         ))
       }),
