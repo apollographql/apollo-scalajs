@@ -4,6 +4,7 @@ _use Apollo Client from your Scala.js React apps!_
 ## Installation
 Add the dependency to your build.sbt
 ```scala
+resolvers += "Apollo Bintray" at "https://dl.bintray.com/apollographql/maven/"
 libraryDependencies += "com.apollographql" %%% "react-apollo-scalajs" % "0.1.0"
 ```
 
