@@ -2,13 +2,13 @@ enablePlugins(ScalaJSBundlerPlugin)
 
 name := "react-apollo-scalajs-example"
 
-libraryDependencies += "me.shadaj" %%% "slinky-web" % "0.1.0"
+libraryDependencies += "me.shadaj" %%% "slinky-web" % "0.2.0"
 
-npmDependencies in Compile += "react" -> "15.6.1"
+npmDependencies in Compile += "react" -> "15.6.2"
 
-npmDependencies in Compile += "react-dom" -> "15.6.1"
+npmDependencies in Compile += "react-dom" -> "15.6.2"
 
-npmDependencies in Compile += "react-apollo" -> "1.4.8"
+npmDependencies in Compile += "react-apollo" -> "1.4.15"
 
 scalaJSUseMainModuleInitializer := true
 
