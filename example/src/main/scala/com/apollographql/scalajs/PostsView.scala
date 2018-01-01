@@ -1,13 +1,13 @@
 package com.apollographql.scalajs
 
-import me.shadaj.slinky.core.{Component, TagComponent}
+import me.shadaj.slinky.core.{ComponentWrapper, TagComponent}
 import me.shadaj.slinky.core.facade.ReactElement
 import me.shadaj.slinky.web.html._
 
 import scala.scalajs.js
 import scala.scalajs.js.annotation.ScalaJSDefined
 
-object PostsView extends Component {
+object PostsView extends ComponentWrapper {
   type Props = AllPostsQuery.Props
   type State = Unit
 

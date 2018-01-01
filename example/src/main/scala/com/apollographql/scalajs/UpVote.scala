@@ -1,15 +1,14 @@
 package com.apollographql.scalajs
 
-import me.shadaj.slinky.core.Component
+import me.shadaj.slinky.core.ComponentWrapper
 import me.shadaj.slinky.core.facade.ReactElement
 import me.shadaj.slinky.web.html._
 
 import scala.scalajs.js
 import scala.scalajs.js.annotation.ScalaJSDefined
-
 import scala.concurrent.ExecutionContext.Implicits.global
 
-object UpVote extends Component {
+object UpVote extends ComponentWrapper {
   case class ExtraProps(postId: Int, update: UpVoteMutation.Data => Unit)
   type Props = UpVoteMutation.Props#WithExtra[ExtraProps]
   type State = Boolean

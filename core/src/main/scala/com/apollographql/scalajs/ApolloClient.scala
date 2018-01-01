@@ -1,6 +1,8 @@
 package com.apollographql.scalajs
 
-import me.shadaj.slinky.core.{ExternalComponent, ObjectOrWritten}
+import me.shadaj.slinky.core.ExternalComponent
+import me.shadaj.slinky.core.annotations.react
+import me.shadaj.slinky.readwrite.ObjectOrWritten
 
 import scala.scalajs.js
 import scala.scalajs.js.annotation.JSImport
@@ -28,7 +30,7 @@ object ReactApolloFascade extends js.Object {
 @js.native
 trait NetworkInterface extends js.Object
 
-object ApolloProvider extends ExternalComponent {
+@react object ApolloProvider extends ExternalComponent {
   case class Props(client: ReactApolloFascade.ApolloClient)
 
   @js.native

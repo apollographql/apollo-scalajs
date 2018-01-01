@@ -1,13 +1,13 @@
 package com.apollographql.scalajs
 
-import me.shadaj.slinky.core.{Component, TagComponent}
+import me.shadaj.slinky.core.{ComponentWrapper, TagComponent}
 import me.shadaj.slinky.core.facade.ReactElement
 import me.shadaj.slinky.web.html._
 
 import scala.scalajs.js
 import scala.scalajs.js.annotation.ScalaJSDefined
 
-object AuthorView extends Component {
+object AuthorView extends ComponentWrapper {
   case class ExtraProps(id: Int)
   type Props = AuthorQuery.Props#WithExtra[ExtraProps]
   type State = Unit

@@ -22,7 +22,7 @@ object Main extends JSApp {
     ))
 
     ReactDOM.render(
-      ApolloProvider(ApolloProvider.Props(client))(
+      ApolloProvider(client)(
         div(
           PostsView.WithData(()),
           AuthorView.WithData(AuthorView.ExtraProps(1))
