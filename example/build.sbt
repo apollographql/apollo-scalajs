@@ -48,3 +48,6 @@ val namespace = "com.apollographql.scalajs"
 
 watchSources ++= ((sourceDirectory in Compile).value / "graphql" ** "*.graphql").get
 
+scalacOptions += "-P:scalajs:sjsDefinedByDefault"
+
+addCompilerPlugin("org.scalameta" % "paradise" % "3.0.0-M11" cross CrossVersion.full)
