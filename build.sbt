@@ -2,9 +2,9 @@ enablePlugins(BintrayPlugin)
 
 organization in ThisBuild := "com.apollographql"
 
-version in ThisBuild := "0.1.0"
+version in ThisBuild := "0.2.0"
 
-scalaVersion in ThisBuild := "2.12.3"
+scalaVersion in ThisBuild := "2.12.4"
 
 scalacOptions in ThisBuild ++= Seq("-feature", "-deprecation")
 

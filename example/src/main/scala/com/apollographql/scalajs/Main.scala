@@ -3,14 +3,14 @@ package com.apollographql.scalajs
 import me.shadaj.slinky.web.ReactDOM
 import me.shadaj.slinky.web.html._
 
-import scala.scalajs.js.JSApp
 import org.scalajs.dom.{document, html}
 
 import scala.scalajs.js
 
-object Main extends JSApp {
-  override def main(): Unit = {
-    if (js.Dynamic.global.reactContainer == js.undefined) {
+object Main {
+
+  def main(args: Array[String]): Unit = {
+    if (js.typeOf(js.Dynamic.global.reactContainer) == "undefined") {
       js.Dynamic.global.reactContainer = document.createElement("div")
       document.body.appendChild(js.Dynamic.global.reactContainer.asInstanceOf[html.Element])
     }
@@ -22,7 +22,7 @@ object Main extends JSApp {
     ))
 
     ReactDOM.render(
-      ApolloProvider(ApolloProvider.Props(client))(
+      ApolloProvider(client)(
         div(
           PostsView.WithData(()),
           AuthorView.WithData(AuthorView.ExtraProps(1))

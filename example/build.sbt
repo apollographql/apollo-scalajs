@@ -2,13 +2,13 @@ enablePlugins(ScalaJSBundlerPlugin)
 
 name := "react-apollo-scalajs-example"
 
-libraryDependencies += "me.shadaj" %%% "slinky-web" % "0.1.0"
+libraryDependencies += "me.shadaj" %%% "slinky-web" % "0.2.0"
 
-npmDependencies in Compile += "react" -> "15.6.1"
+npmDependencies in Compile += "react" -> "15.6.2"
 
-npmDependencies in Compile += "react-dom" -> "15.6.1"
+npmDependencies in Compile += "react-dom" -> "15.6.2"
 
-npmDependencies in Compile += "react-apollo" -> "1.4.8"
+npmDependencies in Compile += "react-apollo" -> "1.4.15"
 
 scalaJSUseMainModuleInitializer := true
 
@@ -30,14 +30,24 @@ val namespace = "com.apollographql.scalajs"
 
   out.mkdirs()
 
+  val graphQLScala = out / "graphql.scala"
+
   Seq(
     "apollo-codegen", "generate", ((sourceDirectory in Compile).value / "graphql").getAbsolutePath + "/*.graphql",
     "--schema", (baseDirectory.value / "schema.json").getAbsolutePath,
     "--target", "scala",
     "--namespace", namespace,
-    "--output", (out / "graphql.scala").getAbsolutePath
+    "--output", graphQLScala.getAbsolutePath
   ).!
-  Seq(out / "graphql.scala")
+
+  // complete hack to get around apollo-codegen 0.18.3 not actually generating the package namespace
+  sbt.IO.writeLines(graphQLScala, s"package $namespace" +: sbt.IO.readLines(graphQLScala))
+
+  Seq(graphQLScala)
 }
 
 watchSources ++= ((sourceDirectory in Compile).value / "graphql" ** "*.graphql").get
+
+scalacOptions += "-P:scalajs:sjsDefinedByDefault"
+
+addCompilerPlugin("org.scalameta" % "paradise" % "3.0.0-M11" cross CrossVersion.full)
