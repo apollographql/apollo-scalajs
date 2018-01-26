@@ -5,7 +5,7 @@ _use Apollo Client from your Scala.js React apps!_
 Add the dependency to your build.sbt
 ```scala
 resolvers += "Apollo Bintray" at "https://dl.bintray.com/apollographql/maven/"
-libraryDependencies += "com.apollographql" %%% "react-apollo-scalajs" % "0.1.0"
+libraryDependencies += "com.apollographql" %%% "react-apollo-scalajs" % "0.2.0"
 ```
 
 You probably also want to add other Slinky modules such as the web module, so check out the instructions at http://github.com/shadaj/slinky
@@ -44,10 +44,12 @@ When creating a React component that will receive data from Apollo, the only spe
 ```scala
 import com.apollographql.scalajs._
 
-object MyComponent extends Component {
+@react class MyComponent extends Component {
   type Props = MyQuery.Data
   ...
-  
+}
+
+object MyComponent {
   val WithData = graphql(MyQuery)(this)
 }
 ```
@@ -67,4 +69,3 @@ ApolloProvider(ApolloProvider.Props(client))(
   ...
 )
 ```
-
