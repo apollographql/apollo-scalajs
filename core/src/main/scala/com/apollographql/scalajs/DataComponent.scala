@@ -1,6 +1,7 @@
 package com.apollographql.scalajs
 
 import slinky.core.ExternalComponent
+import slinky.core.ExternalPropsWriterProvider
 import slinky.readwrite.{Reader, Writer}
 
 import scala.scalajs.concurrent.JSExecutionContext.Implicits.queue
@@ -82,7 +83,9 @@ object ApolloMutationProps {
   }
 }
 
-class DataComponent[P <: ApolloProps](comp: js.Object) extends ExternalComponent {
+class DataComponent[P <: ApolloProps](comp: js.Object)(implicit extraPropsWriter: Writer[P#ExtraProps])
+    extends ExternalComponent()(extraPropsWriter.asInstanceOf[ExternalPropsWriterProvider]) {
+
   type Props = P#ExtraProps
 
   override val component = comp
