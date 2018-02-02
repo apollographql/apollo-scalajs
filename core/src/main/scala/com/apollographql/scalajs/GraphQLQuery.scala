@@ -6,7 +6,7 @@ trait GraphQLQuery {
   type Data
   type Variables
 
-  type Props = ApolloQueryProps[Data, Unit]
+  type Props = ApolloQueryProps[Data, Any]
 }
 
 trait GraphQLMutation {
@@ -15,5 +15,5 @@ trait GraphQLMutation {
   type Data
   type Variables
 
-  type Props = ApolloMutationProps[Variables, Data, Unit]
+  type Props = ApolloMutationProps[Variables, Data, Any]
 }

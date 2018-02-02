@@ -20,7 +20,8 @@ import slinky.web.html._
 
 object AuthorView {
   case class ExtraProps(id: Int)
-  val WithData = graphqlWithVariables(
-    AuthorQuery
-  )((e: AuthorView.ExtraProps) => Some(AuthorQuery.Variables(e.id)))(this)
+  val WithData = graphql(
+    AuthorQuery,
+    (e: AuthorView.ExtraProps) => AuthorQuery.Variables(e.id)
+  )(this)
 }

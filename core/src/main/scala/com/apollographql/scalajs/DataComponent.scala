@@ -7,17 +7,25 @@ import scala.scalajs.concurrent.JSExecutionContext.Implicits.queue
 import scala.concurrent.Future
 import scala.scalajs.js
 
-case class ApolloMutationOptions[V](variables: V)
-object ApolloMutationOptions {
-  implicit def optionsWriter[V](variablesWriter: Writer[V]): Writer[ApolloMutationOptions[V]] = (opts) => {
+import scala.language.implicitConversions
+
+case class ApolloQueryOptions[Q <: GraphQLQuery](variables: Q#Variables)
+case class ApolloQueryObj(variables: js.Object)
+object ApolloQueryOptions {
+  implicit def optionsWriter[Q <: GraphQLQuery](variablesWriter: Writer[Q#Variables]): Writer[ApolloQueryOptions[Q]] = (opts) => {
     js.Dynamic.literal(
       "variables" -> variablesWriter.write(opts.variables)
     )
   }
 
-  implicit def optionsReader[V](variablesReader: Reader[V]): Reader[ApolloMutationOptions[V]] = (optsObj) => {
-    ApolloMutationOptions(
-      variablesReader.read(optsObj.asInstanceOf[js.Dynamic].variables.asInstanceOf[js.Object])
+  implicit def fromVariables[Q <: GraphQLQuery](vars: Q#Variables): ApolloQueryOptions[Q] = ApolloQueryOptions(vars)
+}
+
+case class ApolloMutationOptions[V](variables: V)
+object ApolloMutationOptions {
+  implicit def optionsWriter[V](variablesWriter: Writer[V]): Writer[ApolloMutationOptions[V]] = (opts) => {
+    js.Dynamic.literal(
+      "variables" -> variablesWriter.write(opts.variables)
     )
   }
 
