@@ -15,7 +15,7 @@ trait Query extends js.Object
 
 @js.native
 @JSImport("react-apollo", JSImport.Namespace)
-object ReactApolloFascade extends js.Object {
+object ReactApolloFacade extends js.Object {
   @js.native
   class ApolloClient(options: js.UndefOr[ObjectOrWritten[ApolloClientOptions]] = js.undefined) extends js.Object
 
@@ -31,7 +31,7 @@ object ReactApolloFascade extends js.Object {
 trait NetworkInterface extends js.Object
 
 @react object ApolloProvider extends ExternalComponent {
-  case class Props(client: ReactApolloFascade.ApolloClient)
+  case class Props(client: ReactApolloFacade.ApolloClient)
 
   @js.native
   @JSImport("react-apollo", "ApolloProvider")

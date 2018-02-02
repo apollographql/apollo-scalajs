@@ -9,16 +9,16 @@ import scala.concurrent.Future
 import scala.scalajs.concurrent.JSExecutionContext.Implicits.queue
 
 package object scalajs {
-  type ApolloClient = ReactApolloFascade.ApolloClient
+  type ApolloClient = ReactApolloFacade.ApolloClient
   object ApolloClient {
     def apply(v: js.UndefOr[ObjectOrWritten[ApolloClientOptions]] = js.undefined): ApolloClient = new ApolloClient(v)
   }
 
   def createNetworkInterface(options: js.UndefOr[ObjectOrWritten[NetworkInterfaceOptions]] = js.undefined): NetworkInterface = {
-    ReactApolloFascade.createNetworkInterface(options)
+    ReactApolloFacade.createNetworkInterface(options)
   }
 
-  def gql(query: String): Query = ReactApolloFascade.gql(query)
+  def gql(query: String): Query = ReactApolloFacade.gql(query)
 
   private def graphqlQuery[E, Q <: GraphQLQuery](query: Query, options: js.UndefOr[js.|[ApolloQueryOptions[Q], E => ApolloQueryOptions[Q]]])
                                    (comp: BaseComponentWrapper { type Props = ApolloQueryProps[Q#Data, E] })
@@ -30,7 +30,7 @@ package object scalajs {
     val refetchReader = implicitly[Reader[() => Future[DataResult]]]
     val queryOptionsWriter = implicitly[Writer[js.UndefOr[js.|[ApolloQueryOptions[Q], E => ApolloQueryOptions[Q]]]]]
 
-    new DataComponent[E](ReactApolloFascade.graphql(query, js.Dynamic.literal(
+    new DataComponent[E](ReactApolloFacade.graphql(query, js.Dynamic.literal(
       "props" -> ((obj: js.Object) => {
         val dyn = obj.asInstanceOf[js.Dynamic]
         val networkStatus = dyn.data.networkStatus.asInstanceOf[Int]
@@ -60,7 +60,7 @@ package object scalajs {
                                variablesWriter: Writer[Q#Variables], variablesReader: Reader[Q#Variables]): DataComponent[E] = {
     val mutationWriter = implicitly[Writer[ApolloMutationProps[Q#Variables, Q#Data, E]]]
     val mutateReader = implicitly[Reader[ApolloMutationOptions[Q#Variables] => Future[Q#Data]]]
-    new DataComponent[E](ReactApolloFascade.graphql(query, js.Dynamic.literal(
+    new DataComponent[E](ReactApolloFacade.graphql(query, js.Dynamic.literal(
       "props" -> ((obj: js.Object) => {
         val dyn = obj.asInstanceOf[js.Dynamic]
         val mutationObj = ApolloMutationProps[Q#Variables, Q#Data, E](
