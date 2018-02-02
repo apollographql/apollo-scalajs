@@ -1,8 +1,8 @@
 package com.apollographql.scalajs
 
-import me.shadaj.slinky.core.ExternalComponent
-import me.shadaj.slinky.core.annotations.react
-import me.shadaj.slinky.readwrite.ObjectOrWritten
+import slinky.core.ExternalComponent
+import slinky.core.annotations.react
+import slinky.readwrite.ObjectOrWritten
 
 import scala.scalajs.js
 import scala.scalajs.js.annotation.JSImport

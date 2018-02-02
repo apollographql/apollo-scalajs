@@ -1,7 +1,7 @@
 package com.apollographql.scalajs
 
-import me.shadaj.slinky.web.ReactDOM
-import me.shadaj.slinky.web.html._
+import slinky.web.ReactDOM
+import slinky.web.html._
 
 import org.scalajs.dom.{document, html}
 
