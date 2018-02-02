@@ -1,23 +1,20 @@
 package com.apollographql.scalajs
 
-import me.shadaj.slinky.core.{Component, TagComponent}
-import me.shadaj.slinky.core.annotations.react
-import me.shadaj.slinky.core.facade.ReactElement
-import me.shadaj.slinky.web.html._
+import slinky.core.StatelessComponent
+import slinky.core.annotations.react
+import slinky.core.facade.ReactElement
+import slinky.web.html._
 
 
-@react class AuthorView extends Component {
+@react class AuthorView extends StatelessComponent {
   type Props = AuthorQuery.Props#WithExtra[AuthorView.ExtraProps]
-  type State = Unit
-
-  def initialState: Unit = ()
 
   def render(): ReactElement = {
     props.data.map { d =>
       div(
         d.author.toString
       )
-    }.getOrElse[TagComponent[Any]](h1("loading!"))
+    }.getOrElse(h1("loading!"))
   }
 }
 

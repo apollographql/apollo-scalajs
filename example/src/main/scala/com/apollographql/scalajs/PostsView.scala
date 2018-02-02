@@ -1,15 +1,12 @@
 package com.apollographql.scalajs
 
-import me.shadaj.slinky.core.{Component, TagComponent}
-import me.shadaj.slinky.core.annotations.react
-import me.shadaj.slinky.core.facade.ReactElement
-import me.shadaj.slinky.web.html._
+import slinky.core.StatelessComponent
+import slinky.core.annotations.react
+import slinky.core.facade.ReactElement
+import slinky.web.html._
 
-@react class PostsView extends Component {
+@react class PostsView extends StatelessComponent {
   type Props = AllPostsQuery.Props
-  type State = Unit
-
-  def initialState: Unit = ()
 
   def render(): ReactElement = {
     props.data.map { d =>
@@ -24,7 +21,7 @@ import me.shadaj.slinky.web.html._
           )
         }
       )
-    }.getOrElse[TagComponent[Any]](h1("loading!"))
+    }.getOrElse(h1("loading!"))
   }
 }
 

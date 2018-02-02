@@ -1,9 +1,9 @@
 package com.apollographql.scalajs
 
-import me.shadaj.slinky.core.Component
-import me.shadaj.slinky.core.annotations.react
-import me.shadaj.slinky.core.facade.ReactElement
-import me.shadaj.slinky.web.html._
+import slinky.core.Component
+import slinky.core.annotations.react
+import slinky.core.facade.ReactElement
+import slinky.web.html._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 

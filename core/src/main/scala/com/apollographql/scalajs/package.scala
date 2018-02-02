@@ -1,10 +1,10 @@
 package com.apollographql
 
-import me.shadaj.slinky.core._
-import me.shadaj.slinky.readwrite.{ObjectOrWritten, Reader, Writer}
+import slinky.core._
+import slinky.readwrite.{ObjectOrWritten, Reader, Writer}
 
 import scala.scalajs.js
-import scala.scalajs.js.{ConstructorTag, JSON}
+import scala.scalajs.js.ConstructorTag
 import scala.concurrent.Future
 import scala.scalajs.concurrent.JSExecutionContext.Implicits.queue
 

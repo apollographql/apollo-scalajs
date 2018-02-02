@@ -1,7 +1,7 @@
 package com.apollographql.scalajs
 
-import me.shadaj.slinky.core.ExternalComponent
-import me.shadaj.slinky.readwrite.{Reader, Writer}
+import slinky.core.ExternalComponent
+import slinky.readwrite.{Reader, Writer}
 
 import scala.scalajs.concurrent.JSExecutionContext.Implicits.queue
 import scala.concurrent.Future
