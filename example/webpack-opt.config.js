@@ -3,7 +3,7 @@ var webpack = require('webpack');
 module.exports = {
   "entry": "./opt-launcher.js",
   "output": {
-    "path": ".",
+    "path": __dirname,
     "filename": "[name]-bundle.js"
   },
   "module": {

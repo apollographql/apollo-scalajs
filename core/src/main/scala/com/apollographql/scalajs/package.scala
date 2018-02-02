@@ -28,10 +28,10 @@ package object scalajs {
                       (implicit constructorTag: ConstructorTag[comp.Def],
                        writer: Writer[D], reader: Reader[D],
                        variablesWriter: Writer[V], variablesReader: Reader[V],
-                       extraReader: Reader[E], extraWriter: Writer[E]): DataComponent[comp.Props with ApolloProps] = {
+                       extraReader: Reader[E], extraWriter: Writer[E]): DataComponent[E] = {
     val dataWriter = implicitly[Writer[ApolloQueryProps[D, E]]]
 
-    new DataComponent[comp.Props with ApolloProps](ReactApolloFascade.graphql(query, js.Dynamic.literal(
+    new DataComponent[E](ReactApolloFascade.graphql(query, js.Dynamic.literal(
       "props" -> ((obj: js.Object) => {
         val dyn = obj.asInstanceOf[js.Dynamic]
         val networkStatus = dyn.data.networkStatus.asInstanceOf[Int]
@@ -58,8 +58,22 @@ package object scalajs {
                               (comp: BaseComponentWrapper { type Props = ApolloMutationProps[V, D, E] })
                               (implicit constructorTag: ConstructorTag[comp.Def],
                                writer: Writer[D], reader: Reader[D],
-                               variablesWriter: Writer[V], variablesReader: Reader[V]): DataComponent[comp.Props with ApolloProps] = {
-    new DataComponent[comp.Props with ApolloProps](ReactApolloFascade.graphql(query)(comp.componentConstructor))
+                               extraReader: Reader[E], extraWriter: Writer[E],
+                               variablesWriter: Writer[V], variablesReader: Reader[V]): DataComponent[E] = {
+    val mutationWriter = implicitly[Writer[ApolloMutationProps[V, D, E]]]
+    val mutateReader = implicitly[Reader[ApolloMutationOptions[V] => Future[D]]]
+    new DataComponent[E](ReactApolloFascade.graphql(query, js.Dynamic.literal(
+      "props" -> ((obj: js.Object) => {
+        val dyn = obj.asInstanceOf[js.Dynamic]
+        val mutationObj = ApolloMutationProps[V, D, E](
+          mutate = mutateReader.read(dyn.mutate.asInstanceOf[js.Object]),
+          extraReader.read(dyn.ownProps.asInstanceOf[js.Object])
+        )
+        val retBeforeAssign = mutationWriter.write(mutationObj)
+        retBeforeAssign.asInstanceOf[js.Dynamic].__ = mutationObj.asInstanceOf[js.Object]
+        retBeforeAssign
+      })
+    ))(comp.componentConstructor))
   }
 
   def graphql[E](query: GraphQLQuery)
@@ -67,7 +81,7 @@ package object scalajs {
                 (implicit constructorTag: ConstructorTag[comp.Def],
                  writer: Writer[query.Data], reader: Reader[query.Data],
                  variablesWriter: Writer[query.Variables], variablesReader: Reader[query.Variables],
-                 extraReader: Reader[E], extraWriter: Writer[E]): DataComponent[comp.Props with ApolloProps] = {
+                 extraReader: Reader[E], extraWriter: Writer[E]): DataComponent[E] = {
     graphql[query.Data, query.Variables, E](query.operation, _ => None)(comp)
   }
 
@@ -77,7 +91,7 @@ package object scalajs {
                              (implicit constructorTag: ConstructorTag[comp.Def],
                               writer: Writer[query.Data], reader: Reader[query.Data],
                               variablesWriter: Writer[query.Variables], variablesReader: Reader[query.Variables],
-                              extraReader: Reader[E], extraWriter: Writer[E]): DataComponent[comp.Props with ApolloProps] = {
+                              extraReader: Reader[E], extraWriter: Writer[E]): DataComponent[E] = {
     graphql[query.Data, query.Variables, E](query.operation, variables)(comp)
   }
 
@@ -85,7 +99,7 @@ package object scalajs {
                 (comp: BaseComponentWrapper { type Props = ApolloMutationProps[query.Variables, query.Data, E]})
                 (implicit constructorTag: ConstructorTag[comp.Def],
                  writer: Writer[query.Data], reader: Reader[query.Data],
-                 variablesWriter: Writer[query.Variables], variablesReader: Reader[query.Variables]): DataComponent[comp.Props with ApolloProps] = {
+                 variablesWriter: Writer[query.Variables], variablesReader: Reader[query.Variables]): DataComponent[E] = {
     graphqlMutation[query.Data, query.Variables, E](query.operation)(comp)
   }
 }

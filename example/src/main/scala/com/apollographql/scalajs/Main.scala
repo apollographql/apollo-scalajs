@@ -2,14 +2,20 @@ package com.apollographql.scalajs
 
 import slinky.web.ReactDOM
 import slinky.web.html._
+import slinky.hot
 
 import org.scalajs.dom.{document, html}
 
 import scala.scalajs.js
+import scala.scalajs.js.JSApp
+import scala.scalajs.LinkingInfo
 
-object Main {
+object Main extends JSApp {
+  def main(): Unit = {
+    if (LinkingInfo.developmentMode) {
+      hot.initialize()
+    }
 
-  def main(args: Array[String]): Unit = {
     if (js.typeOf(js.Dynamic.global.reactContainer) == "undefined") {
       js.Dynamic.global.reactContainer = document.createElement("div")
       document.body.appendChild(js.Dynamic.global.reactContainer.asInstanceOf[html.Element])

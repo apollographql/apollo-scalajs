@@ -1,9 +1,9 @@
 module.exports = {
-  "entry": [
-    "../../../../fastopt-launcher.js"
-  ],
+  "entry": {
+    "react-apollo-scalajs-example-fastopt": "../../../../fastopt-launcher.js"
+  },
   "output": {
-    "path": ".",
+    "path": __dirname,
     "filename": "[name]-bundle.js"
   }
 }
