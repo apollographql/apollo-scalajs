@@ -21,7 +21,7 @@ object Main extends JSApp {
       document.body.appendChild(js.Dynamic.global.reactContainer.asInstanceOf[html.Element])
     }
 
-    val client = ApolloClient(ApolloClientOptions(
+    val client = ApolloBoostClient(ApolloClientOptions(
       networkInterface = Some(createNetworkInterface(NetworkInterfaceOptions(
         uri = Some("https://1jzxrj179.lp.gql.zone/graphql")
       )))

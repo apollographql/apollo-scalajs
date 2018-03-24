@@ -14,4 +14,6 @@ bintrayOrganization in ThisBuild := Some("apollographql")
 
 lazy val core = project
 
+lazy val tests = project.dependsOn(core)
+
 lazy val example = project.dependsOn(core)

@@ -1,19 +1,15 @@
 package com.apollographql.scalajs
 
 trait GraphQLQuery {
-  val operation: Query
+  val operation: ParsedQuery
 
   type Data
   type Variables
-
-  type Props = ApolloQueryProps[Data, Any]
 }
 
 trait GraphQLMutation {
-  val operation: Query
+  val operation: ParsedQuery
 
   type Data
   type Variables
-
-  type Props = ApolloMutationProps[Variables, Data, Any]
 }
