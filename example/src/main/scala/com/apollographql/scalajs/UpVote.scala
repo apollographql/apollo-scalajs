@@ -8,25 +8,25 @@ import slinky.web.html._
 import scala.concurrent.ExecutionContext.Implicits.global
 
 @react class UpVote extends Component {
-  type Props = UpVoteMutation.Props#WithExtra[UpVote.ExtraProps]
+  case class Props(postId: Int, update: UpVoteMutation.Data => Unit)
   type State = Boolean
 
   def initialState = false
 
   def render(): ReactElement = {
-    button(onClick := (() => {
-      setState(true)
-      props.mutate(UpVoteMutation.Variables(props.extraProps.postId)).foreach { r =>
-        setState(false)
-        props.extraProps.update(r)
-      }
-    }), disabled := state)(
-      div(if (state) "upvoting" else "upvote!")
-    )
+    Mutation(UpVoteMutation) { (mut, _) =>
+      button(
+        onClick := (() => {
+          setState(true)
+          mut(UpVoteMutation.Variables(props.postId)).foreach { r =>
+            setState(false)
+            props.update(r.data)
+          }
+        }),
+        disabled := state
+      )(
+        div(if (state) "upvoting" else "upvote!")
+      )
+    }
   }
-}
-
-object UpVote {
-  case class ExtraProps(postId: Int, update: UpVoteMutation.Data => Unit)
-  val WithData = graphql(UpVoteMutation)(this)
 }

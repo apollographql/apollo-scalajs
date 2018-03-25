@@ -2,14 +2,17 @@ enablePlugins(ScalaJSBundlerPlugin)
 
 name := "react-apollo-scalajs-example"
 
-libraryDependencies += "me.shadaj" %%% "slinky-web" % "0.3.0"
-libraryDependencies += "me.shadaj" %%% "slinky-hot" % "0.3.0"
+libraryDependencies += "me.shadaj" %%% "slinky-web" % "0.3.2+4-f2220e6b"
+libraryDependencies += "me.shadaj" %%% "slinky-hot" % "0.3.2+4-f2220e6b"
 
 npmDependencies in Compile += "react" -> "16.2.0"
 
 npmDependencies in Compile += "react-dom" -> "16.2.0"
 
-npmDependencies in Compile += "react-apollo" -> "1.4.15"
+npmDependencies in Compile += "apollo-boost" -> "0.1.3"
+npmDependencies in Compile += "react-apollo" -> "2.1.0"
+npmDependencies in Compile += "graphql-tag" -> "2.8.0"
+npmDependencies in Compile += "graphql" -> "0.13.2"
 
 npmDependencies in Compile += "react-proxy" -> "1.1.8"
 

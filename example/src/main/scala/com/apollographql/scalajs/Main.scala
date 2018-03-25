@@ -21,17 +21,15 @@ object Main extends JSApp {
       document.body.appendChild(js.Dynamic.global.reactContainer.asInstanceOf[html.Element])
     }
 
-    val client = ApolloBoostClient(ApolloClientOptions(
-      networkInterface = Some(createNetworkInterface(NetworkInterfaceOptions(
-        uri = Some("https://1jzxrj179.lp.gql.zone/graphql")
-      )))
-    ))
+    val client = ApolloBoostClient(
+      uri = "https://1jzxrj179.lp.gql.zone/graphql"
+    )
 
     ReactDOM.render(
       ApolloProvider(client)(
         div(
-          PostsView.WithData(()),
-          AuthorView.WithData(AuthorView.ExtraProps(1))
+          PostsView(),
+          AuthorView(1)
         )
       ),
       js.Dynamic.global.reactContainer.asInstanceOf[html.Element]
