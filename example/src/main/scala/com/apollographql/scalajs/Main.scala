@@ -7,10 +7,11 @@ import slinky.hot
 import org.scalajs.dom.{document, html}
 
 import scala.scalajs.js
-import scala.scalajs.js.JSApp
+import scala.scalajs.js.annotation.JSExportTopLevel
 import scala.scalajs.LinkingInfo
 
-object Main extends JSApp {
+object Main {
+  @JSExportTopLevel("entrypoint.main")
   def main(): Unit = {
     if (LinkingInfo.developmentMode) {
       hot.initialize()

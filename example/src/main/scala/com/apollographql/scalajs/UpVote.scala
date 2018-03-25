@@ -1,31 +1,22 @@
 package com.apollographql.scalajs
 
-import slinky.core.Component
+import slinky.core.StatelessComponent
 import slinky.core.annotations.react
 import slinky.core.facade.ReactElement
 import slinky.web.html._
 
-import scala.concurrent.ExecutionContext.Implicits.global
-
-@react class UpVote extends Component {
-  case class Props(postId: Int, update: UpVoteMutation.Data => Unit)
-  type State = Boolean
-
-  def initialState = false
+@react class UpVote extends StatelessComponent {
+  case class Props(postId: Int)
 
   def render(): ReactElement = {
-    Mutation(UpVoteMutation) { (mut, _) =>
+    Mutation(UpVoteMutation) { (mut, res) =>
       button(
         onClick := (() => {
-          setState(true)
-          mut(UpVoteMutation.Variables(props.postId)).foreach { r =>
-            setState(false)
-            props.update(r.data)
-          }
+          mut(UpVoteMutation.Variables(props.postId))
         }),
-        disabled := state
+        disabled := res.loading
       )(
-        div(if (state) "upvoting" else "upvote!")
+        div(if (res.loading) "upvoting" else "upvote!")
       )
     }
   }

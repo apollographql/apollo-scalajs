@@ -16,9 +16,7 @@ import slinky.web.html._
             div(key := post.id.toString)(
               h1(post.title.getOrElse[String]("???")),
               h2(post.votes.getOrElse(0).toString),
-              UpVote(post.id, v => {
-                println(s"Upvote result: $v")
-              })
+              UpVote(post.id)
             )
           }
         )
