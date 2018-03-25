@@ -6,8 +6,6 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.scalajs.js
 import scala.scalajs.js.annotation.JSImport
 
-case class ApolloBoostClientOptions(uri: String)
-
 case class QueryOptions(query: ParsedQuery, variables: js.UndefOr[js.Object] = js.undefined)
 
 case class QueryResult(data: js.Object)
@@ -35,6 +33,9 @@ object ApolloClientInstance {
 trait ApolloClientInstanceRawInterface extends js.Object {
   def query(options: ObjectOrWritten[QueryOptions]): js.Promise[js.Object] = js.native
 }
+
+case class ApolloBoostClientOptions(uri: String,
+                                    fetchOptions: js.UndefOr[js.Object] = js.undefined)
 
 @JSImport("apollo-boost", JSImport.Default)
 @js.native
