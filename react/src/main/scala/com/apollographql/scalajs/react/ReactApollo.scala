@@ -1,4 +1,4 @@
-package com.apollographql.scalajs
+package com.apollographql.scalajs.react
 
 import scala.scalajs.js
 import scala.scalajs.js.annotation.JSImport

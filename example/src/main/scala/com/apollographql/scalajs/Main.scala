@@ -1,9 +1,9 @@
 package com.apollographql.scalajs
 
+import com.apollographql.scalajs.react.ApolloProvider
 import slinky.web.ReactDOM
 import slinky.web.html._
 import slinky.hot
-
 import org.scalajs.dom.{document, html}
 
 import scala.scalajs.js

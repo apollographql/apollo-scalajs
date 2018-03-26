@@ -1,13 +1,12 @@
-package com.apollographql.scalajs
+package com.apollographql.scalajs.react
 
-import org.scalatest.{Assertion, AsyncFunSuite}
-import slinky.web.ReactDOM
-
-import scala.scalajs.js
+import com.apollographql.scalajs.{ApolloBoostClient, UnfetchFetch}
 import org.scalajs.dom.document
+import org.scalatest.AsyncFunSuite
+import slinky.web.ReactDOM
 import slinky.web.html.div
 
-import scala.concurrent.{Future, Promise}
+import scala.scalajs.js
 
 class ReactApolloTest extends AsyncFunSuite {
   js.Dynamic.global.fetch = UnfetchFetch

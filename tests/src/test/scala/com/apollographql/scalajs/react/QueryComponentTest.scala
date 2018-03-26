@@ -1,5 +1,6 @@
-package com.apollographql.scalajs
+package com.apollographql.scalajs.react
 
+import com.apollographql.scalajs._
 import org.scalajs.dom.document
 import org.scalatest.{Assertion, AsyncFunSuite}
 import slinky.web.ReactDOM

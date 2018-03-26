@@ -1,5 +1,6 @@
-package com.apollographql.scalajs
+package com.apollographql.scalajs.react
 
+import com.apollographql.scalajs.{GraphQLQuery, ParsedQuery}
 import slinky.core.ExternalComponent
 import slinky.core.facade.ReactElement
 import slinky.readwrite.{Reader, Writer}

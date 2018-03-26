@@ -1,13 +1,14 @@
-package com.apollographql.scalajs
+package com.apollographql.scalajs.react
 
+import com.apollographql.scalajs._
 import slinky.core.ExternalComponent
 import slinky.core.facade.ReactElement
 import slinky.readwrite.{Reader, Writer}
 
 import scala.concurrent.Future
-import scala.scalajs.js
-import scala.scalajs.js.{JSON, |}
 import scala.language.implicitConversions
+import scala.scalajs.js
+import scala.scalajs.js.|
 
 case class MutationData[T](loading: Boolean, called: Boolean, error: Option[Error], data: Option[T])
 object MutationData {

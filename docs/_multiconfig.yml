@@ -1,0 +1,72 @@
+github_repo: apollographql/scalajs-react-apollo
+description: null
+author: null
+language: null
+timezone: null
+apis:
+  segment: wgrIo8Bul0Ujl8USETG3DB6hONdy4kTg
+  gtm: GTM-PNFDVBB
+  docsearch:
+    apiKey: 768e823959d35bbd51e4b2439be13fb7
+    indexName: apollodata
+content_root: docs/source
+css_bundle: apollo
+nav_class: sunset
+apollo_nav: true
+favicon: images/favicon-apollo.png
+logo:
+  nav_mobile: images/logo-apollo-space-left.svg
+  title: Apollo
+  url: 'https://www.apollographql.com/'
+social_links:
+  github: 'https://github.com/apollographql'
+  twitter: '@apollographql'
+  slackInvitePage: 'https://www.apollodata.com/#slack'
+root: /docs/scalajs/
+permalink: ':year/:month/:day/:title/'
+permalink_defaults: null
+source_dir: source
+public_dir: public/docs/scalajs
+tag_dir: tags
+archive_dir: archives
+category_dir: categories
+code_dir: downloads/code
+i18n_dir: ':lang'
+skip_render: null
+new_post_name: ':title.html'
+default_layout: post
+titlecase: false
+external_link: true
+filename_case: 0
+render_drafts: false
+post_asset_folder: false
+relative_link: false
+future: true
+highlight:
+  enable: true
+  line_number: true
+  auto_detect: true
+  tab_replace: null
+default_category: uncategorized
+category_map: null
+tag_map: null
+date_format: YYYY-MM-DD
+time_format: 'HH:mm:ss'
+per_page: 10
+pagination_dir: page
+theme: ../node_modules/meteor-theme-hexo
+marked:
+  breaks: false
+deploy:
+  type: null
+title: Apollo Scala.js
+subtitle: Use Apollo Client from your Scala.js applications
+versions:
+  - '1'
+sidebar_categories:
+  'null':
+    - index
+  Essentials:
+    - essentials/installation
+    - essentials/getting-started
+url: 'https://www.apollographql.com/docs/scalajs/'

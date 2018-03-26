@@ -1,6 +1,6 @@
 enablePlugins(ScalaJSPlugin)
 
-name := "apollo-scalajs"
+name := "apollo-scalajs-react"
 
 libraryDependencies += "me.shadaj" %%% "slinky-core" % "0.3.2+4-f2220e6b"
 

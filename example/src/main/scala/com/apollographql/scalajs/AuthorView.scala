@@ -1,5 +1,6 @@
 package com.apollographql.scalajs
 
+import com.apollographql.scalajs.react.Query
 import slinky.core.StatelessComponent
 import slinky.core.annotations.react
 import slinky.core.facade.ReactElement

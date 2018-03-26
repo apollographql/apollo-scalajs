@@ -1,5 +1,6 @@
-package com.apollographql.scalajs
+package com.apollographql.scalajs.react
 
+import com.apollographql.scalajs.ApolloClientInstance
 import slinky.core.ExternalComponent
 import slinky.core.annotations.react
 

@@ -12,8 +12,14 @@ licenses in ThisBuild += ("MIT", url("http://opensource.org/licenses/MIT"))
 
 bintrayOrganization in ThisBuild := Some("apollographql")
 
+lazy val root = project.in(file(".")).aggregate(
+  core, react
+)
+
 lazy val core = project
 
-lazy val tests = project.dependsOn(core)
+lazy val react = project.dependsOn(core)
 
-lazy val example = project.dependsOn(core)
+lazy val tests = project.dependsOn(core, react)
+
+lazy val example = project.dependsOn(core, react)
