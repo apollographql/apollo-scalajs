@@ -77,7 +77,7 @@ Query[QueryData](gql(
 ## Querying with Variables
 When performing a GraphQL query with a Query component, you can also pass in variables to be used by the query as an additional parameter. Just like the result, variables can be typed with an additional type parameter, or left untyped by using `js.Object` as the type.
 
-If we wanted to perform a query with untyped variables, you can use `js.Dynamic.literal` to construct the variables object.
+To perform a query with untyped variables, you can use `js.Dynamic.literal` to construct the variables object.
 ```scala
 case class Dog(id: String, breed: String)
 case class QueryData(dog: Dog)
@@ -103,6 +103,29 @@ Query[QueryData, js.Object](
 }
 ```
 
+If we want to type the variables being passed into the query, we can define a case class to replace `js.Object` in the type parameters.
+```scala
+case class Variables(breed: String)
+
+Query[QueryData, Variables](
+  gql(
+    """query dog($breed: String!) {
+      |  dog(breed: $breed) {
+      |    id
+      |    displayImage
+      |  }
+      |}""".stripMargin
+  ),
+  Variables(breed = "bulldog")
+) { queryStatus =>
+  if (queryStatus.loading) "Loading..."
+  else if (queryStatus.error) s"Error! ${queryStatus.error.message}"
+  else {
+    img(src := queryStatus.data.get.dog.displayImage)
+  }
+}
+```
+
 ## Automatic Query Types
 With `apollo-codegen`, we can automatically generate query objects that tie together GraphQL queries with response types based on the schema definition. First, make sure you have followed the [Apollo Codegen Installation](./installation.html#Apollo-Codegen) steps and downloaded a schema by following the [instructions](https://github.com/apollographql/apollo-codegen#introspect-schema). For this example, we will be using the GraphQL server at `https://w5xlvm3vzz.lp.gql.zone/graphql`.
 
@@ -119,6 +142,28 @@ Which results in an object `UsdRatesQuery` being generated. To use this in a que
 
 ```scala
 Query(UsdRatesQuery)  { queryStatus =>
+  if (queryStatus.loading) "Loading..."
+  else if (queryStatus.error) s"Error! ${queryStatus.error.message}"
+  else {
+    div(queryStatus.data.get.rates.mkString(", "))
+  }
+}
+```
+
+Apollo Codegen also supports generating variables types, which are emitted as case classes inside the query object. To pass in variables to a query that requires some, simply pass in an instance of the variables class as a parameter after the query object.
+
+For a query:
+```graphql
+query CurrencyRates($cur: String!) {
+  rates(currency: $cur) {
+    currency
+  }
+}
+```
+
+We could pass in variables in a query component as:
+```scala
+Query(CurrencyRatesQuery, CurrencyRatesQuery.Variables("USD"))  { queryStatus =>
   if (queryStatus.loading) "Loading..."
   else if (queryStatus.error) s"Error! ${queryStatus.error.message}"
   else {
