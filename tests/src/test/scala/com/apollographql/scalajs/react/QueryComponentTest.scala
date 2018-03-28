@@ -140,4 +140,24 @@ class QueryComponentTest extends AsyncFunSuite {
 
     gotDataPromise.future
   }
+
+  test("Can mount a Query component with a cache-only fetch policy") {
+    val didntLoadPromise = Promise[Assertion]
+    ReactDOM.render(
+      ApolloProvider(
+        client = ApolloBoostClient(uri = "https://w5xlvm3vzz.lp.gql.zone/graphql")
+      )(
+        Query(CurrencyRatesQuery, CurrencyRatesQuery.Variables("USD"), ExtraQueryOptions(
+          fetchPolicy = "cache-only"
+        )) { d =>
+          didntLoadPromise.trySuccess(assert(!d.loading))
+
+          div()
+        }
+      ),
+      document.createElement("div")
+    )
+
+    didntLoadPromise.future
+  }
 }

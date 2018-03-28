@@ -12,9 +12,7 @@ licenses in ThisBuild += ("MIT", url("http://opensource.org/licenses/MIT"))
 
 bintrayOrganization in ThisBuild := Some("apollographql")
 
-lazy val root = project.in(file(".")).settings(
-  name := "apollo-scalajs"
-).aggregate(
+lazy val root = project.in(file(".")).withId("apollo-scalajs").aggregate(
   core, react
 )
 

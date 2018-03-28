@@ -13,23 +13,24 @@ object QueryData {
   implicit def reader[T](implicit tReader: Reader[T]): Reader[QueryData[T]] = { o =>
     val dyn = o.asInstanceOf[js.Dynamic]
     val loading = Reader.booleanReader.read(dyn.loading.asInstanceOf[js.Object])
+    val error = Reader.optionReader[Error].read(dyn.error.asInstanceOf[js.Object])
     QueryData(
       loading,
-      Reader.optionReader[Error].read(dyn.error.asInstanceOf[js.Object]),
-      if (loading) None else Some(tReader.read(dyn.data.asInstanceOf[js.Object])),
+      error,
+      if (loading || error.isDefined) None else Some(tReader.read(dyn.data.asInstanceOf[js.Object])),
       implicitly[Reader[() => Unit]].read(dyn.refetch.asInstanceOf[js.Object])
     )
   }
 }
 
-case class QueryOptions(pollInterval: js.UndefOr[Double] = js.undefined,
-                        notifyOnNetworkStatusChange: js.UndefOr[Boolean] = js.undefined,
-                        fetchPolicy: js.UndefOr[String] = js.undefined,
-                        errorPolicy: js.UndefOr[String] = js.undefined,
-                        ssr: js.UndefOr[Boolean] = js.undefined,
-                        displayName: js.UndefOr[String] = js.undefined,
-                        delay: js.UndefOr[Boolean] = js.undefined,
-                        context: js.UndefOr[js.Object] = js.undefined)
+case class ExtraQueryOptions(pollInterval: js.UndefOr[Double] = js.undefined,
+                             notifyOnNetworkStatusChange: js.UndefOr[Boolean] = js.undefined,
+                             fetchPolicy: js.UndefOr[String] = js.undefined,
+                             errorPolicy: js.UndefOr[String] = js.undefined,
+                             ssr: js.UndefOr[Boolean] = js.undefined,
+                             displayName: js.UndefOr[String] = js.undefined,
+                             delay: js.UndefOr[Boolean] = js.undefined,
+                             context: js.UndefOr[js.Object] = js.undefined)
 
 object Query extends ExternalComponent {
   case class Props(query: ParsedQuery,
@@ -43,7 +44,7 @@ object Query extends ExternalComponent {
                    displayName: js.UndefOr[String] = js.undefined,
                    delay: js.UndefOr[Boolean] = js.undefined,
                    context: js.UndefOr[js.Object] = js.undefined)
-  def apply[T, V](query: ParsedQuery, variables: V, queryOptions: QueryOptions)
+  def apply[T, V](query: ParsedQuery, variables: V, queryOptions: ExtraQueryOptions)
                  (children: QueryData[T] => ReactElement)
                  (implicit tReader: Reader[T], vWriter: Writer[V]): slinky.core.BuildingComponent[Element, js.Object] = {
     val queryDataReader = QueryData.reader(tReader)
@@ -71,11 +72,11 @@ object Query extends ExternalComponent {
     apply[T, V](
       query = query,
       variables = variables,
-      queryOptions = QueryOptions()
+      queryOptions = ExtraQueryOptions()
     )(children)
   }
 
-  def apply[T](query: ParsedQuery, queryOptions: QueryOptions)
+  def apply[T](query: ParsedQuery, queryOptions: ExtraQueryOptions)
               (children: QueryData[T] => ReactElement)
               (implicit tReader: Reader[T]): slinky.core.BuildingComponent[Element, js.Object] = {
     apply[T, Unit](
@@ -90,11 +91,11 @@ object Query extends ExternalComponent {
               (implicit tReader: Reader[T]): slinky.core.BuildingComponent[Element, js.Object] = {
     apply[T](
       query = query,
-      queryOptions = QueryOptions()
+      queryOptions = ExtraQueryOptions()
     )(children)
   }
 
-  def apply[Q <: GraphQLQuery](query: Q, variables: Q#Variables, queryOptions: QueryOptions)
+  def apply[Q <: GraphQLQuery](query: Q, variables: Q#Variables, queryOptions: ExtraQueryOptions)
                               (children: QueryData[query.Data] => ReactElement)
                               (implicit dataReader: Reader[query.Data],
                                variablesWriter: Writer[Q#Variables]): slinky.core.BuildingComponent[Element, js.Object] = {
@@ -112,11 +113,11 @@ object Query extends ExternalComponent {
     apply[Q](
       query = query,
       variables = variables,
-      queryOptions = QueryOptions()
+      queryOptions = ExtraQueryOptions()
     )(children)
   }
 
-  def apply(query: GraphQLQuery { type Variables = Unit }, queryOptions: QueryOptions)
+  def apply(query: GraphQLQuery { type Variables = Unit }, queryOptions: ExtraQueryOptions)
            (children: QueryData[query.Data] => ReactElement)
            (implicit dataReader: Reader[query.Data]): slinky.core.BuildingComponent[Element, js.Object] = {
     apply[GraphQLQuery {type Variables = Unit }](
@@ -131,7 +132,7 @@ object Query extends ExternalComponent {
            (implicit dataReader: Reader[query.Data]): slinky.core.BuildingComponent[Element, js.Object] = {
     apply(
       query = query,
-      queryOptions = QueryOptions()
+      queryOptions = ExtraQueryOptions()
     )(children)
   }
 

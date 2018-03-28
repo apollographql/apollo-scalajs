@@ -172,5 +172,14 @@ Query(CurrencyRatesQuery, CurrencyRatesQuery.Variables("USD"))  { queryStatus =>
 }
 ```
 
+## Extra Query Options
+If you want to pass in additional query options, such as the fetch policy, you can provide an instance of `ExtraQueryOptions` as an additional parameter. For example, to force the query to only load from the cache you can use:
+
+```scala
+Query(CurrencyRatesQuery, CurrencyRatesQuery.Variables("USD"), ExtraQueryOptions(
+  fetchPolicy = "cache-only"
+)) { ... }
+```
+
 ## Next steps
 Now that you've learned how to get data from your GraphQL server, it's time to learn to update that data with [Mutations](./mutations.html)!
