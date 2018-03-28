@@ -69,4 +69,8 @@ sidebar_categories:
   Essentials:
     - essentials/installation
     - essentials/getting-started
+    - essentials/queries
+    - essentials/mutations
+  Advanced:
+    - advanced/fragments
 url: 'https://www.apollographql.com/docs/scalajs/'
