@@ -22,7 +22,7 @@ def main(): Unit = { // called when the app launches
 That’s it! Now your client is ready to start fetching data. Before we hook up Apollo Scala.js to React, let’s try sending a query with plain Scala first with the `client.query` function.
 
 ```scala
-client.query(gql( // gql is a member of the com.apollographql.scalajs package that parses your query
+client.query[js.Object](gql( // gql is a member of the com.apollographql.scalajs package that parses your query
   """{
     |  rates(currency: "USD") {
     |    currency

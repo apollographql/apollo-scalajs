@@ -7,7 +7,16 @@ import scala.scalajs.js
 import scala.scalajs.js.annotation.JSImport
 
 case class QueryOptions(query: ParsedQuery, variables: js.UndefOr[js.Object] = js.undefined)
-case class QueryResult(data: js.Object)
+
+case class QueryResult[T](data: T)
+object QueryResult {
+  implicit def reader[T](implicit tReader: Reader[T]): Reader[QueryResult[T]] = { o =>
+    val dyn = o.asInstanceOf[js.Dynamic]
+    QueryResult[T](
+      tReader.read(dyn.data.asInstanceOf[js.Object])
+    )
+  }
+}
 
 @js.native
 trait ApolloClientInstance extends js.Object
@@ -19,16 +28,17 @@ object ApolloClientInstance {
 
   implicit class RichInstance(val i: ApolloClientInstance) extends AnyVal {
     private def raw = i.asInstanceOf[ApolloClientInstanceRawInterface]
-    def query(options: QueryOptions)(implicit ec: ExecutionContext): Future[QueryResult] = {
-      raw.query(options).toFuture.map(implicitly[Reader[QueryResult]].read)
+    def query[R](options: QueryOptions)(implicit ec: ExecutionContext, rReader: Reader[R]): Future[QueryResult[R]] = {
+      raw.query(options).toFuture.map(QueryResult.reader(rReader).read)
     }
 
-    def query(query: ParsedQuery)(implicit ec: ExecutionContext): Future[QueryResult] = {
-      raw.query(QueryOptions(query)).toFuture.map(implicitly[Reader[QueryResult]].read)
+    def query[R](query: ParsedQuery)(implicit ec: ExecutionContext, rReader: Reader[R]): Future[QueryResult[R]] = {
+      raw.query(QueryOptions(query)).toFuture.map(QueryResult.reader(rReader).read)
     }
 
-    def query(query: ParsedQuery, variables: js.Object)(implicit ec: ExecutionContext): Future[QueryResult] = {
-      raw.query(QueryOptions(query, variables)).toFuture.map(implicitly[Reader[QueryResult]].read)
+    def query[R, V](query: ParsedQuery, variables: ObjectOrWritten[V])
+                   (implicit ec: ExecutionContext, rReader: Reader[R]): Future[QueryResult[R]] = {
+      raw.query(QueryOptions(query, variables)).toFuture.map(QueryResult.reader(rReader).read)
     }
   }
 }
