@@ -21,7 +21,7 @@ Query[js.Object](gql(
     |    currency
     |  }
     |}""".stripMargin
-))) { result =>
+)) { result =>
   if (result.loading) {
     h1("Loading!")
   } else {
@@ -161,7 +161,7 @@ query CurrencyRates($cur: String!) {
 }
 ```
 
-We could pass in variables in a query component as:
+We can pass in variables in a query component as:
 ```scala
 Query(CurrencyRatesQuery, CurrencyRatesQuery.Variables("USD"))  { queryStatus =>
   if (queryStatus.loading) "Loading..."
@@ -171,3 +171,6 @@ Query(CurrencyRatesQuery, CurrencyRatesQuery.Variables("USD"))  { queryStatus =>
   }
 }
 ```
+
+## Next steps
+Now that you've learned how to get data from your GraphQL server, it's time to learn to update that data with [Mutations](./mutations.html)!
