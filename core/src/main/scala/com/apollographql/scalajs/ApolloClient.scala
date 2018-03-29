@@ -6,7 +6,13 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.scalajs.js
 import scala.scalajs.js.annotation.JSImport
 
-case class QueryOptions(query: ParsedQuery, variables: js.UndefOr[js.Object] = js.undefined)
+case class ApolloClientOptions(link: js.Object, cache: js.Object)
+
+@JSImport("apollo-client", "ApolloClient")
+@js.native
+class ApolloClient(options: ObjectOrWritten[ApolloClientOptions]) extends ApolloClientInstance
+
+case class QueryOptions(query: DocumentNode, variables: js.UndefOr[js.Object] = js.undefined)
 
 case class QueryResult[T](data: T)
 object QueryResult {
@@ -22,7 +28,7 @@ object QueryResult {
 trait ApolloClientInstance extends js.Object
 object ApolloClientInstance {
   @js.native
-  trait ApolloClientInstanceRawInterface extends js.Object {
+  private trait ApolloClientInstanceRawInterface extends js.Object {
     def query(options: ObjectOrWritten[QueryOptions]): js.Promise[js.Object] = js.native
   }
 
@@ -32,11 +38,11 @@ object ApolloClientInstance {
       raw.query(options).toFuture.map(QueryResult.reader(rReader).read)
     }
 
-    def query[R](query: ParsedQuery)(implicit ec: ExecutionContext, rReader: Reader[R]): Future[QueryResult[R]] = {
+    def query[R](query: DocumentNode)(implicit ec: ExecutionContext, rReader: Reader[R]): Future[QueryResult[R]] = {
       raw.query(QueryOptions(query)).toFuture.map(QueryResult.reader(rReader).read)
     }
 
-    def query[R, V](query: ParsedQuery, variables: ObjectOrWritten[V])
+    def query[R, V](query: DocumentNode, variables: ObjectOrWritten[V])
                    (implicit ec: ExecutionContext, rReader: Reader[R]): Future[QueryResult[R]] = {
       raw.query(QueryOptions(query, variables)).toFuture.map(QueryResult.reader(rReader).read)
     }

@@ -1,5 +1,7 @@
 package com.apollographql.scalajs
 
+import com.apollographql.scalajs.cache.InMemoryCache
+import com.apollographql.scalajs.link.{HttpLink, HttpLinkOptions}
 import org.scalatest.AsyncFunSuite
 
 import scala.scalajs.js
@@ -14,6 +16,13 @@ class ApolloClientTest extends AsyncFunSuite {
 
   implicit override def executionContext =
     scala.concurrent.ExecutionContext.Implicits.global
+
+  test("Can create an instance of Apollo Client") {
+    assert(!js.isUndefined(new ApolloClient(ApolloClientOptions(
+      link = new HttpLink(HttpLinkOptions("https://w5xlvm3vzz.lp.gql.zone/graphql")),
+      cache = new InMemoryCache()
+    ))))
+  }
 
   test("Can create an instance of Apollo Client using Apollo Boost") {
     assert(!js.isUndefined(ApolloBoostClient(

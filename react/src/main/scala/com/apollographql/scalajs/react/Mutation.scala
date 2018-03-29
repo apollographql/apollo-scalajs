@@ -45,10 +45,10 @@ object CallMutationProps {
 }
 
 object Mutation extends ExternalComponent {
-  case class Props(mutation: ParsedQuery,
+  case class Props(mutation: DocumentNode,
                    children: (js.Object, js.Object) => ReactElement)
 
-  def apply[T](query: ParsedQuery)
+  def apply[T](query: DocumentNode)
               (children: (CallMutationProps[Unit] => Future[MutationResult[T]], MutationData[T]) => ReactElement)
               (implicit tReader: Reader[T]): slinky.core.BuildingComponent[Element, js.Object] = {
     val queryDataReader = MutationData.reader(tReader)
@@ -63,7 +63,7 @@ object Mutation extends ExternalComponent {
     ))
   }
 
-  def apply[T, V](query: ParsedQuery)
+  def apply[T, V](query: DocumentNode)
               (children: (CallMutationProps[V] => Future[MutationResult[T]], MutationData[T]) => ReactElement)
               (implicit tReader: Reader[T], vWriter: Writer[V]): slinky.core.BuildingComponent[Element, js.Object] = {
     val queryDataReader = MutationData.reader(tReader)

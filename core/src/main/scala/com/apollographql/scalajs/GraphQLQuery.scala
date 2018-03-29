@@ -1,14 +1,14 @@
 package com.apollographql.scalajs
 
 trait GraphQLQuery {
-  val operation: ParsedQuery
+  val operation: DocumentNode
 
   type Data
   type Variables
 }
 
 trait GraphQLMutation {
-  val operation: ParsedQuery
+  val operation: DocumentNode
 
   type Data
   type Variables

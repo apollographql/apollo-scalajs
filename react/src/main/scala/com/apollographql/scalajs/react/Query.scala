@@ -1,6 +1,6 @@
 package com.apollographql.scalajs.react
 
-import com.apollographql.scalajs.{GraphQLQuery, ParsedQuery}
+import com.apollographql.scalajs.{GraphQLQuery, DocumentNode}
 import slinky.core.ExternalComponent
 import slinky.core.facade.ReactElement
 import slinky.readwrite.{Reader, Writer}
@@ -33,7 +33,7 @@ case class ExtraQueryOptions(pollInterval: js.UndefOr[Double] = js.undefined,
                              context: js.UndefOr[js.Object] = js.undefined)
 
 object Query extends ExternalComponent {
-  case class Props(query: ParsedQuery,
+  case class Props(query: DocumentNode,
                    children: js.Object => ReactElement,
                    variables: js.UndefOr[js.Object] = js.undefined,
                    pollInterval: js.UndefOr[Double] = js.undefined,
@@ -44,7 +44,7 @@ object Query extends ExternalComponent {
                    displayName: js.UndefOr[String] = js.undefined,
                    delay: js.UndefOr[Boolean] = js.undefined,
                    context: js.UndefOr[js.Object] = js.undefined)
-  def apply[T, V](query: ParsedQuery, variables: V, queryOptions: ExtraQueryOptions)
+  def apply[T, V](query: DocumentNode, variables: V, queryOptions: ExtraQueryOptions)
                  (children: QueryData[T] => ReactElement)
                  (implicit tReader: Reader[T], vWriter: Writer[V]): slinky.core.BuildingComponent[Element, js.Object] = {
     val queryDataReader = QueryData.reader(tReader)
@@ -66,7 +66,7 @@ object Query extends ExternalComponent {
     ))
   }
 
-  def apply[T, V](query: ParsedQuery, variables: V)
+  def apply[T, V](query: DocumentNode, variables: V)
                  (children: QueryData[T] => ReactElement)
                  (implicit tReader: Reader[T], vWriter: Writer[V]): slinky.core.BuildingComponent[Element, js.Object] = {
     apply[T, V](
@@ -76,7 +76,7 @@ object Query extends ExternalComponent {
     )(children)
   }
 
-  def apply[T](query: ParsedQuery, queryOptions: ExtraQueryOptions)
+  def apply[T](query: DocumentNode, queryOptions: ExtraQueryOptions)
               (children: QueryData[T] => ReactElement)
               (implicit tReader: Reader[T]): slinky.core.BuildingComponent[Element, js.Object] = {
     apply[T, Unit](
@@ -86,7 +86,7 @@ object Query extends ExternalComponent {
     )(children)
   }
 
-  def apply[T](query: ParsedQuery)
+  def apply[T](query: DocumentNode)
               (children: QueryData[T] => ReactElement)
               (implicit tReader: Reader[T]): slinky.core.BuildingComponent[Element, js.Object] = {
     apply[T](
