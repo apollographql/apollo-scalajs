@@ -8,6 +8,7 @@ import slinky.web.html.div
 
 import scala.concurrent.{Future, Promise}
 import scala.scalajs.js
+import scala.util.{Failure, Success}
 
 class MutationComponentTest extends AsyncFunSuite {
   js.Dynamic.global.fetch = UnfetchFetch
@@ -50,6 +51,41 @@ class MutationComponentTest extends AsyncFunSuite {
     callMutation()
 
     gotDataPromise.future
+  }
+
+  test("Can mount a Mutation component and get an error when the mutation fails") {
+    val gotFailurePromise = Promise[Assertion]
+
+    var ranMutation = false
+
+    ReactDOM.render(
+      ApolloProvider(
+        client = ApolloBoostClient(uri = "https://8v9r9kpn7q.lp.gql.zone/graphql")
+      )(
+        Mutation[Unit, Unit](gql(
+          """mutation {
+            |  randomMutationThatDoesntExist(type: "lol") {
+            |    typ: type
+            |  }
+            |}""".stripMargin
+        )) { (mut, d) =>
+          if (!ranMutation) {
+            ranMutation = true
+            mut().andThen {
+              case Success(_) =>
+                gotFailurePromise.failure(new Exception("Succeeded when it shouldn't have"))
+              case Failure(_) =>
+                gotFailurePromise.success(assert(true))
+            }
+          }
+
+          div()
+        }
+      ),
+      document.createElement("div")
+    )
+
+    gotFailurePromise.future
   }
 
   test("Can mount a Mutation component and call the mutation with variables") {
