@@ -2,6 +2,6 @@ enablePlugins(ScalaJSPlugin)
 
 name := "apollo-scalajs-react"
 
-libraryDependencies += "me.shadaj" %%% "slinky-core" % "0.3.2+4-f2220e6b"
+libraryDependencies += "me.shadaj" %%% "slinky-core" % "0.4.0"
 
 addCompilerPlugin("org.scalameta" % "paradise" % "3.0.0-M10" cross CrossVersion.full)
