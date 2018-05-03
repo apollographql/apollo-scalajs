@@ -12,6 +12,9 @@ bintrayOrganization in ThisBuild := Some("apollographql")
 
 lazy val root = project.in(file(".")).withId("apollo-scalajs").aggregate(
   core, react
+).settings(
+  publish := {},
+  publishLocal := {}
 )
 
 lazy val core = project
