@@ -1,0 +1,5 @@
+mutation AddTodo($typ: String!) {
+  addTodo(type: $typ) {
+    typ: type
+  }
+}

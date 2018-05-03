@@ -1,41 +1,50 @@
 package com.apollographql.scalajs
 
-import slinky.core.ExternalComponent
-import slinky.core.annotations.react
-import slinky.readwrite.ObjectOrWritten
+import slinky.readwrite.{ObjectOrWritten, Reader}
 
+import scala.concurrent.{ExecutionContext, Future}
 import scala.scalajs.js
 import scala.scalajs.js.annotation.JSImport
 
-case class ApolloClientOptions(networkInterface: Option[NetworkInterface] = None)
-case class NetworkInterfaceOptions(uri: Option[String] = None)
+case class ApolloClientOptions(link: js.Object, cache: js.Object)
 
+@JSImport("apollo-client", "ApolloClient")
 @js.native
-trait Query extends js.Object
+class ApolloClient(options: ObjectOrWritten[ApolloClientOptions]) extends ApolloClientInstance
 
-@js.native
-@JSImport("react-apollo", JSImport.Namespace)
-object ReactApolloFacade extends js.Object {
-  @js.native
-  class ApolloClient(options: js.UndefOr[ObjectOrWritten[ApolloClientOptions]] = js.undefined) extends js.Object
+case class QueryOptions(query: DocumentNode, variables: js.UndefOr[js.Object] = js.undefined)
 
-  def createNetworkInterface(options: js.UndefOr[ObjectOrWritten[NetworkInterfaceOptions]]): NetworkInterface = js.native
-
-  def gql(query: String): Query = js.native
-
-  def graphql(query: Query): js.Function1[js.Any, js.Object] = js.native
-  def graphql(query: Query, options: js.Object): js.Function1[js.Any, js.Object] = js.native
+case class QueryResult[T](data: T)
+object QueryResult {
+  implicit def reader[T](implicit tReader: Reader[T]): Reader[QueryResult[T]] = { o =>
+    val dyn = o.asInstanceOf[js.Dynamic]
+    QueryResult[T](
+      tReader.read(dyn.data.asInstanceOf[js.Object])
+    )
+  }
 }
 
 @js.native
-trait NetworkInterface extends js.Object
-
-@react object ApolloProvider extends ExternalComponent {
-  case class Props(client: ReactApolloFacade.ApolloClient)
-
+trait ApolloClientInstance extends js.Object
+object ApolloClientInstance {
   @js.native
-  @JSImport("react-apollo", "ApolloProvider")
-  private object Comp extends js.Object
+  private trait ApolloClientInstanceRawInterface extends js.Object {
+    def query(options: ObjectOrWritten[QueryOptions]): js.Promise[js.Object] = js.native
+  }
 
-  override val component = Comp
+  implicit class RichInstance(val i: ApolloClientInstance) extends AnyVal {
+    private def raw = i.asInstanceOf[ApolloClientInstanceRawInterface]
+    def query[R](options: QueryOptions)(implicit ec: ExecutionContext, rReader: Reader[R]): Future[QueryResult[R]] = {
+      raw.query(options).toFuture.map(QueryResult.reader(rReader).read)
+    }
+
+    def query[R](query: DocumentNode)(implicit ec: ExecutionContext, rReader: Reader[R]): Future[QueryResult[R]] = {
+      raw.query(QueryOptions(query)).toFuture.map(QueryResult.reader(rReader).read)
+    }
+
+    def query[R, V](query: DocumentNode, variables: ObjectOrWritten[V])
+                   (implicit ec: ExecutionContext, rReader: Reader[R]): Future[QueryResult[R]] = {
+      raw.query(QueryOptions(query, variables)).toFuture.map(QueryResult.reader(rReader).read)
+    }
+  }
 }

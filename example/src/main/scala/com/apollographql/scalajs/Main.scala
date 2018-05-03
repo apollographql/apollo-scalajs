@@ -1,16 +1,17 @@
 package com.apollographql.scalajs
 
+import com.apollographql.scalajs.react.ApolloProvider
 import slinky.web.ReactDOM
 import slinky.web.html._
 import slinky.hot
-
 import org.scalajs.dom.{document, html}
 
 import scala.scalajs.js
-import scala.scalajs.js.JSApp
+import scala.scalajs.js.annotation.JSExportTopLevel
 import scala.scalajs.LinkingInfo
 
-object Main extends JSApp {
+object Main {
+  @JSExportTopLevel("entrypoint.main")
   def main(): Unit = {
     if (LinkingInfo.developmentMode) {
       hot.initialize()
@@ -21,17 +22,15 @@ object Main extends JSApp {
       document.body.appendChild(js.Dynamic.global.reactContainer.asInstanceOf[html.Element])
     }
 
-    val client = ApolloClient(ApolloClientOptions(
-      networkInterface = Some(createNetworkInterface(NetworkInterfaceOptions(
-        uri = Some("https://1jzxrj179.lp.gql.zone/graphql")
-      )))
-    ))
+    val client = ApolloBoostClient(
+      uri = "https://1jzxrj179.lp.gql.zone/graphql"
+    )
 
     ReactDOM.render(
       ApolloProvider(client)(
         div(
-          PostsView.WithData(()),
-          AuthorView.WithData(AuthorView.ExtraProps(1))
+          PostsView(),
+          AuthorView(1)
         )
       ),
       js.Dynamic.global.reactContainer.asInstanceOf[html.Element]

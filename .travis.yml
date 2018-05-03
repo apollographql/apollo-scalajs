@@ -1,0 +1,14 @@
+language: scala
+scala:
+  - 2.12.3
+branches:
+  only:
+    - master
+    - /^v\d+(\.\d+)+$/
+install:
+  - . $HOME/.nvm/nvm.sh
+  - nvm install stable
+  - npm install -g apollo-codegen
+script:
+  - sbt tests/test
+  - sbt ";set scalaJSStage in Global := FullOptStage; tests/test"

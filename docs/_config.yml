@@ -1,0 +1,22 @@
+title: Apollo Scala.js
+subtitle: Use Apollo Client from your Scala.js applications
+
+versions:
+  - '1'
+sidebar_categories:
+  null:
+    - index
+  Essentials:
+    - essentials/installation
+    - essentials/getting-started
+    - essentials/queries
+    - essentials/mutations
+  Advanced:
+    - advanced/fragments
+github_repo: apollographql/apollo-scalajs
+content_root: docs/source
+
+url: https://www.apollographql.com/docs/scalajs/
+root: /docs/scalajs/
+
+public_dir: public/docs/scalajs
