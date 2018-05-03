@@ -1,14 +1,16 @@
 # react-apollo-scalajs
 _use Apollo Client from your Scala.js React apps!_
 
+## View the [docs](https://github.com/apollographql/react-apollo-scalajs/tree/master/docs/source)
+
 ## Installation
 Add the dependency to your build.sbt
 ```scala
 resolvers += "Apollo Bintray" at "https://dl.bintray.com/apollographql/maven/"
-libraryDependencies += "com.apollographql" %%% "react-apollo-scalajs" % "0.2.0"
+libraryDependencies += "com.apollographql" %%% "react-apollo-scalajs" % "0.4.0"
 ```
 
-You probably also want to add other Slinky modules such as the web module, so check out the instructions at http://github.com/shadaj/slinky
+You probably also want to add other Slinky modules such as the web module, so check out the instructions at https://slinky.shadaj.me
 
 To set up the code generator, which uses `apollo-codegen` to generate static types for your GraphQL queries, first install `apollo-codegen`
 ```npm i -g apollo-codegen```
@@ -39,33 +41,32 @@ val namespace = "your package here"
 ## Usage
 Once you have placed some GraphQL queries in `src/main/graphql`, you can use the generated types to create GraphQL-powered React components!
 
-When creating a React component that will receive data from Apollo, the only special step is specifying the `Props` type to be the `Data` type inside your query object and creating a `WithData` component through the `graphql` higher-order-component.
+To integrate GraphQL data in your React tree, simply use the `Query` component to render subtrees based on a specified query.
 
 ```scala
-import com.apollographql.scalajs._
-
-@react class MyComponent extends Component {
-  type Props = MyQuery.Data
-  ...
-}
-
-object MyComponent {
-  val WithData = graphql(MyQuery)(this)
+Query(UsdRatesQuery)  { queryStatus =>
+  if (queryStatus.loading) "Loading..."
+  else if (queryStatus.error) s"Error! ${queryStatus.error.message}"
+  else {
+    div(queryStatus.data.get.rates.mkString(", "))
+  }
 }
 ```
 
-For implementing the rest of your component, follow the instructions in http://github.com/shadaj/slinky
+For more on implementing advanced components, follow the instructions at https://slinky.shadaj.me
 
 Next, to initialize Apollo Client in your application, first create an instance of the client
 
 ```scala
-val client = ApolloClient(ApolloClientOptions())
+val client = ApolloBoostClient(
+  uri = "https://w5xlvm3vzz.lp.gql.zone/graphql"
+)
 ```
 
-Next, wrap your React component tree inside an `ApolloProvider` component, which all components inside to perform GraphQL queries with the specified client
+Finally, wrap your React component tree inside an `ApolloProvider` component, which all components inside to perform GraphQL queries with the specified client
 
 ```scala
-ApolloProvider(ApolloProvider.Props(client))(
+ApolloProvider(client)(
   ...
 )
 ```

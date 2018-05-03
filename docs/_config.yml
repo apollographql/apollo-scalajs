@@ -13,7 +13,7 @@ sidebar_categories:
     - essentials/mutations
   Advanced:
     - advanced/fragments
-github_repo: apollographql/scalajs-react-apollo
+github_repo: apollographql/apollo-scalajs
 content_root: docs/source
 
 url: https://www.apollographql.com/docs/scalajs/
