@@ -7,7 +7,7 @@ _use Apollo Client from your Scala.js React apps!_
 Add the dependency to your build.sbt
 ```scala
 resolvers += "Apollo Bintray" at "https://dl.bintray.com/apollographql/maven/"
-libraryDependencies += "com.apollographql" %%% "react-apollo-scalajs" % "0.4.0"
+libraryDependencies += "com.apollographql" %%% "apollo-scalajs-react" % "0.4.0"
 ```
 
 You probably also want to add other Slinky modules such as the web module, so check out the instructions at https://slinky.shadaj.me
