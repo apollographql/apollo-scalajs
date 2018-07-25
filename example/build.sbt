@@ -51,8 +51,15 @@ val namespace = "com.apollographql.scalajs"
     "--output", graphQLScala.getAbsolutePath
   ).!
 
-  // complete hack to get around apollo-codegen 0.18.3 not actually generating the package namespace
-  sbt.IO.writeLines(graphQLScala, s"package $namespace" +: sbt.IO.readLines(graphQLScala))
+  // complete hack to get around apollo-codegen below 0.20 not actually generating the package namespace
+
+  val isApolloCodegenVersionBelow020 =
+    Seq("apollo-codegen","--version").!!.trim.split('.').map(_.toInt) match
+    { case Array(0,j,_) if j<20 => true
+      case _ => false
+    }
+
+  if (isApolloCodegenVersionBelow020) sbt.IO.writeLines(graphQLScala, s"package $namespace" +: sbt.IO.readLines(graphQLScala))
 
   Seq(graphQLScala)
 }
