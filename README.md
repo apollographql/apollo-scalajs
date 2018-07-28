@@ -12,8 +12,8 @@ libraryDependencies += "com.apollographql" %%% "apollo-scalajs-react" % "0.4.0"
 
 You probably also want to add other Slinky modules such as the web module, so check out the instructions at https://slinky.shadaj.me
 
-To set up the code generator, which uses `apollo-codegen` to generate static types for your GraphQL queries, first install `apollo-codegen`
-```npm i -g apollo-codegen```
+To set up the code generator, which uses `apollo` to generate static types for your GraphQL queries, first install `apollo`
+```npm i -g apollo```
 
 and then set up SBT to automatically run it
 
@@ -28,12 +28,12 @@ val namespace = "your package here"
   out.mkdirs()
 
   Seq(
-    "apollo-codegen", "generate", ((sourceDirectory in Compile).value / "graphql").getAbsolutePath + "/*.graphql",
-    "--schema", (baseDirectory.value / "schema.json").getAbsolutePath,
-    "--target", "scala",
+    "apollo", "codegen:generate", s"--queries=${((sourceDirectory in Compile).value / "graphql").getAbsolutePath}/*.graphql",
+    s"--schema=${(baseDirectory.value / "schema.json").getAbsolutePath}",
     "--namespace", namespace,
-    "--output", (out / "graphql.scala").getAbsolutePath
+    (out / "graphql.scala").getAbsolutePath
   ).!
+
   Seq(out / "graphql.scala")
 }
 ```

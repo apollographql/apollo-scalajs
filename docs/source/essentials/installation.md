@@ -21,11 +21,11 @@ npmDependencies in Compile += "graphql-tag" -> "2.8.0"
 npmDependencies in Compile += "graphql" -> "0.13.2"
 ```
 
-## Apollo Codegen
-To set up the code generator, which generates static types based on your GraphQL queries, first install the `apollo-codegen` CLI.
+## Apollo CLI
+To set up the code generator, which generates static types based on your GraphQL queries, first install the Apollo CLI.
 
 ```bash
-npm install -g apollo-codegen
+npm install -g apollo
 ```
 
 Then, you can configure SBT to automatically run it and add the resulting Scala sources to your build.
@@ -41,12 +41,12 @@ val namespace = "com.my.package.graphql"
   out.mkdirs()
 
   Seq(
-    "apollo-codegen", "generate", ((sourceDirectory in Compile).value / "graphql").getAbsolutePath + "/*.graphql",
-    "--schema", (baseDirectory.value / "schema.json").getAbsolutePath,
-    "--target", "scala",
+    "apollo", "codegen:generate", s"--queries=${((sourceDirectory in Compile).value / "graphql").getAbsolutePath}/*.graphql",
+    s"--schema=${(baseDirectory.value / "schema.json").getAbsolutePath}",
     "--namespace", namespace,
-    "--output", (out / "graphql.scala").getAbsolutePath
+    (out / "graphql.scala").getAbsolutePath
   ).!
+
   Seq(out / "graphql.scala")
 }
 

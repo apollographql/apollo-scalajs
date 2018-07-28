@@ -44,22 +44,11 @@ val namespace = "com.apollographql.scalajs"
   val graphQLScala = out / "graphql.scala"
 
   Seq(
-    "apollo-codegen", "generate", ((sourceDirectory in Compile).value / "graphql").getAbsolutePath + "/*.graphql",
-    "--schema", (baseDirectory.value / "schema.json").getAbsolutePath,
-    "--target", "scala",
+    "apollo", "codegen:generate", s"--queries=${((sourceDirectory in Compile).value / "graphql").getAbsolutePath}/*.graphql",
+    s"--schema=${(baseDirectory.value / "schema.json").getAbsolutePath}",
     "--namespace", namespace,
-    "--output", graphQLScala.getAbsolutePath
+    graphQLScala.getAbsolutePath
   ).!
-
-  // complete hack to get around apollo-codegen below 0.20 not actually generating the package namespace
-
-  val isApolloCodegenVersionBelow020 =
-    Seq("apollo-codegen","--version").!!.trim.split('.').map(_.toInt) match
-    { case Array(0,j,_) if j<20 => true
-      case _ => false
-    }
-
-  if (isApolloCodegenVersionBelow020) sbt.IO.writeLines(graphQLScala, s"package $namespace" +: sbt.IO.readLines(graphQLScala))
 
   Seq(graphQLScala)
 }

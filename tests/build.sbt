@@ -31,15 +31,11 @@ val namespace = "com.apollographql.scalajs"
   val graphQLScala = out / "queries.scala"
 
   Seq(
-    "apollo-codegen", "generate", ((sourceDirectory in Test).value / "graphql" / "queries").getAbsolutePath + "/*.graphql",
-    "--schema", (baseDirectory.value / "queries.json").getAbsolutePath,
-    "--target", "scala",
+    "apollo", "codegen:generate", s"--queries=${((sourceDirectory in Test).value / "graphql" / "queries").getAbsolutePath}/*.graphql",
+    s"--schema=${(baseDirectory.value / "queries.json").getAbsolutePath}",
     "--namespace", namespace,
-    "--output", graphQLScala.getAbsolutePath
+    graphQLScala.getAbsolutePath
   ).!
-
-  // complete hack to get around apollo-codegen 0.18.3 not actually generating the package namespace
-  sbt.IO.writeLines(graphQLScala, s"package $namespace" +: sbt.IO.readLines(graphQLScala))
 
   Seq(graphQLScala)
 }
@@ -54,15 +50,11 @@ val namespace = "com.apollographql.scalajs"
   val graphQLScala = out / "mutations.scala"
 
   Seq(
-    "apollo-codegen", "generate", ((sourceDirectory in Test).value / "graphql" / "mutations").getAbsolutePath + "/*.graphql",
-    "--schema", (baseDirectory.value / "mutations.json").getAbsolutePath,
-    "--target", "scala",
+    "apollo", "codegen:generate", s"--queries=${((sourceDirectory in Test).value / "graphql" / "mutations").getAbsolutePath}/*.graphql",
+    s"--schema=${(baseDirectory.value / "mutations.json").getAbsolutePath}",
     "--namespace", namespace,
-    "--output", graphQLScala.getAbsolutePath
+    graphQLScala.getAbsolutePath
   ).!
-
-  // complete hack to get around apollo-codegen 0.18.3 not actually generating the package namespace
-  sbt.IO.writeLines(graphQLScala, s"package $namespace" +: sbt.IO.readLines(graphQLScala))
 
   Seq(graphQLScala)
 }
