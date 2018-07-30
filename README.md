@@ -1,5 +1,5 @@
-# react-apollo-scalajs
-_use Apollo Client from your Scala.js React apps!_
+# Apollo Scala.js
+_use Apollo Client and React Apollo from your Scala.js apps!_
 
 ## View the [docs](https://github.com/apollographql/react-apollo-scalajs/tree/master/docs/source)
 
@@ -7,12 +7,13 @@ _use Apollo Client from your Scala.js React apps!_
 Add the dependency to your build.sbt
 ```scala
 resolvers += "Apollo Bintray" at "https://dl.bintray.com/apollographql/maven/"
-libraryDependencies += "com.apollographql" %%% "apollo-scalajs-react" % "0.4.0"
+libraryDependencies += "com.apollographql" %%% "apollo-scalajs-core" % "0.4.0" // if you are writing a vanilla Scala.js app
+libraryDependencies += "com.apollographql" %%% "apollo-scalajs-react" % "0.4.0" // if you are writing a React Scala.js app
 ```
 
 You probably also want to add other Slinky modules such as the web module, so check out the instructions at https://slinky.shadaj.me
 
-To set up the code generator, which uses `apollo` to generate static types for your GraphQL queries, first install `apollo`
+To set up the code generator, which uses the Apollo CLI to generate static types for your GraphQL queries, first install `apollo`
 ```npm i -g apollo```
 
 and then set up SBT to automatically run it
@@ -55,7 +56,7 @@ Query(UsdRatesQuery)  { queryStatus =>
 
 For more on implementing advanced components, follow the instructions at https://slinky.shadaj.me
 
-Next, to initialize Apollo Client in your application, first create an instance of the client
+Next, to initialize Apollo Client in your application, first create an instance of the client (here using Apollo Boost)
 
 ```scala
 val client = ApolloBoostClient(
