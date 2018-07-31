@@ -1,5 +1,3 @@
-enablePlugins(BintrayPlugin)
-
 organization in ThisBuild := "com.apollographql"
 
 scalaVersion in ThisBuild := "2.12.6"
@@ -17,9 +15,9 @@ lazy val root = project.in(file(".")).withId("apollo-scalajs").aggregate(
   publishLocal := {}
 )
 
-lazy val core = project
+lazy val core = project.enablePlugins(BintrayPlugin)
 
-lazy val react = project.dependsOn(core)
+lazy val react = project.dependsOn(core).enablePlugins(BintrayPlugin)
 
 lazy val tests = project.dependsOn(core, react)
 
