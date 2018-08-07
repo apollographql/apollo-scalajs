@@ -21,7 +21,7 @@ logo:
 social_links:
   github: 'https://github.com/apollographql'
   twitter: '@apollographql'
-  slackInvitePage: 'https://www.apollodata.com/#slack'
+  slackInvitePage: 'https://www.apollographql.com/slack'
 root: /docs/scalajs/
 permalink: ':year/:month/:day/:title/'
 permalink_defaults: null
@@ -42,11 +42,6 @@ render_drafts: false
 post_asset_folder: false
 relative_link: false
 future: true
-highlight:
-  enable: true
-  line_number: true
-  auto_detect: true
-  tab_replace: null
 default_category: uncategorized
 category_map: null
 tag_map: null
@@ -57,8 +52,17 @@ pagination_dir: page
 theme: ../node_modules/meteor-theme-hexo
 marked:
   breaks: false
+highlight:
+  enable: false
+prism_plus:
+  enable: true
+  mode: preprocess
+  default_preset:
+    lineno: true
 deploy:
   type: null
+browsersync:
+  ghostMode: false
 title: Apollo Scala.js
 subtitle: Use Apollo Client from your Scala.js applications
 versions:
