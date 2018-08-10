@@ -1,7 +1,7 @@
 # Apollo Scala.js
 _use Apollo Client and React Apollo from your Scala.js apps!_
 
-## View the [docs](https://github.com/apollographql/react-apollo-scalajs/tree/master/docs/source)
+## View the [docs](https://www.apollographql.com/docs/scalajs)
 
 ## Installation
 Add the dependency to your build.sbt
