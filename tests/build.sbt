@@ -3,15 +3,15 @@ enablePlugins(ScalaJSBundlerPlugin)
 resolvers in Global += Resolver.sonatypeRepo("releases")
 
 libraryDependencies += "org.scalatest" %%% "scalatest" % "3.0.3" % Test
-libraryDependencies += "me.shadaj" %%% "slinky-web" % "0.4.3" % Test
+libraryDependencies += "me.shadaj" %%% "slinky-web" % "0.5.0" % Test
 
-npmDependencies in Test += "react" -> "16.2.0"
-npmDependencies in Test += "react-dom" -> "16.2.0"
+npmDependencies in Test += "react" -> "16.5.2"
+npmDependencies in Test += "react-dom" -> "16.5.2"
 
-npmDependencies in Compile += "apollo-boost" -> "0.1.3"
-npmDependencies in Compile += "react-apollo" -> "2.1.0"
-npmDependencies in Compile += "graphql-tag" -> "2.8.0"
-npmDependencies in Compile += "graphql" -> "0.13.2"
+npmDependencies in Compile += "apollo-boost" -> "0.1.16"
+npmDependencies in Compile += "react-apollo" -> "2.2.2"
+npmDependencies in Compile += "graphql-tag" -> "2.9.2"
+npmDependencies in Compile += "graphql" -> "14.0.2"
 
 npmDependencies in Compile += "unfetch" -> "2.1.1"
 
