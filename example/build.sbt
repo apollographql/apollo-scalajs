@@ -2,17 +2,17 @@ enablePlugins(ScalaJSBundlerPlugin)
 
 name := "react-apollo-scalajs-example"
 
-libraryDependencies += "me.shadaj" %%% "slinky-web" % "0.4.3"
-libraryDependencies += "me.shadaj" %%% "slinky-hot" % "0.4.3"
+libraryDependencies += "me.shadaj" %%% "slinky-web" % "0.5.0"
+libraryDependencies += "me.shadaj" %%% "slinky-hot" % "0.5.0"
 
-npmDependencies in Compile += "react" -> "16.2.0"
-npmDependencies in Compile += "react-dom" -> "16.2.0"
+npmDependencies in Compile += "react" -> "16.5.2"
+npmDependencies in Compile += "react-dom" -> "16.5.2"
 npmDependencies in Compile += "react-proxy" -> "1.1.8"
 
-npmDependencies in Compile += "apollo-boost" -> "0.1.3"
-npmDependencies in Compile += "react-apollo" -> "2.1.0"
-npmDependencies in Compile += "graphql-tag" -> "2.8.0"
-npmDependencies in Compile += "graphql" -> "0.13.2"
+npmDependencies in Compile += "apollo-boost" -> "0.1.16"
+npmDependencies in Compile += "react-apollo" -> "2.2.2"
+npmDependencies in Compile += "graphql-tag" -> "2.9.2"
+npmDependencies in Compile += "graphql" -> "14.0.2"
 
 npmDevDependencies in Compile += "file-loader" -> "1.1.5"
 npmDevDependencies in Compile += "style-loader" -> "0.19.0"
@@ -22,7 +22,7 @@ npmDevDependencies in Compile += "copy-webpack-plugin" -> "4.2.0"
 
 scalacOptions += "-P:scalajs:sjsDefinedByDefault"
 
-addCompilerPlugin("org.scalameta" % "paradise" % "3.0.0-M11" cross CrossVersion.full)
+addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
 
 webpackConfigFile in fastOptJS := Some(baseDirectory.value / "webpack-fastopt.config.js")
 webpackConfigFile in fullOptJS := Some(baseDirectory.value / "webpack-opt.config.js")
