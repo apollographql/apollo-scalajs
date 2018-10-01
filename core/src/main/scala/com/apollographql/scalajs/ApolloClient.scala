@@ -6,7 +6,7 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.scalajs.js
 import scala.scalajs.js.annotation.JSImport
 
-case class ApolloClientOptions(link: js.Object, cache: js.Object)
+case class ApolloClientOptions(link: js.Object, cache: js.Object, ssrMode: Boolean = false)
 
 @JSImport("apollo-client", "ApolloClient")
 @js.native
