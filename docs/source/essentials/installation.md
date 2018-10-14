@@ -6,8 +6,8 @@ order: 0
 Add the dependency to your `build.sbt`
 ```scala
 resolvers += "Apollo Bintray" at "https://dl.bintray.com/apollographql/maven/"
-libraryDependencies += "com.apollographql" %%% "apollo-scalajs-core" % "0.4.2"
-libraryDependencies += "com.apollographql" %%% "apollo-scalajs-react" % "0.4.2"
+libraryDependencies += "com.apollographql" %%% "apollo-scalajs-core" % "0.4.3"
+libraryDependencies += "com.apollographql" %%% "apollo-scalajs-react" % "0.4.3"
 ```
 
 If you are using the React API, you may want to add other Slinky modules such as the web and hot-reloading module, so check out the instructions at https://slinky.shadaj.me/docs/installation/.
