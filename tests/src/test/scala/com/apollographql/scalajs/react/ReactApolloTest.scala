@@ -31,11 +31,9 @@ class ReactApolloTest extends AsyncFunSuite {
     ))
   }
 
-  test("Can render data to string based on a query") {
+  test("Can server-side render data to string based on a query") {
     js.Dynamic.global.fetch = UnfetchFetch
 
-    val gotDataPromise = Promise[Assertion]
-    val gotRenderedStringPromise = Promise[Assertion]
     val link = new HttpLink(options = HttpLinkOptions(uri = "https://w5xlvm3vzz.lp.gql.zone/graphql"))
     val cache = new InMemoryCache()
     val client = new ApolloClient(options = js.Dynamic.literal(ssrMode = true, link = link, cache = cache))
@@ -44,20 +42,15 @@ class ReactApolloTest extends AsyncFunSuite {
       ApolloProvider(ApolloProvider.Props(client = client))(
         Query(
           CurrencyRatesQuery,
-          CurrencyRatesQuery.Variables("USD"),
-          queryOptions = ExtraQueryOptions(ssr = true)) { d =>
+          CurrencyRatesQuery.Variables("USD")
+        ) { d =>
           if (d.data.isDefined) {
-            gotDataPromise.success(assert(d.data.get.rates.exists(_.nonEmpty)))
-            println(JSON.stringify(d.data.get.rates.head))
-            div(JSON.stringify(d.data.get.rates.head))
+            div(d.data.get.rates.get.head.get.currency.get)
           } else ""
         }
       )
-    ).toFuture.foreach(html => {
-      gotRenderedStringPromise.success(assert(html.length > 0))
-      html
-    })
-    gotRenderedStringPromise.future
-    gotDataPromise.future
+    ).toFuture.map { html =>
+      assert(html == """<div data-reactroot="">AED</div>""")
+    }
   }
 }
