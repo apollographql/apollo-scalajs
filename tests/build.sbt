@@ -31,10 +31,7 @@ val namespace = "com.apollographql.scalajs"
   val graphQLScala = out / "queries.scala"
 
   Seq(
-    "apollo", "codegen:generate", s"--queries=${((sourceDirectory in Test).value / "graphql" / "queries").getAbsolutePath}/*.graphql",
-    s"--schema=${(baseDirectory.value / "queries.json").getAbsolutePath}",
-    "--namespace", namespace,
-    graphQLScala.getAbsolutePath
+    "apollo", "client:codegen", "--config", "tests/src/test/graphql/queries", "--target", "scala", "--namespace", namespace, graphQLScala.getAbsolutePath
   ).!
 
   Seq(graphQLScala)
@@ -50,10 +47,7 @@ val namespace = "com.apollographql.scalajs"
   val graphQLScala = out / "mutations.scala"
 
   Seq(
-    "apollo", "codegen:generate", s"--queries=${((sourceDirectory in Test).value / "graphql" / "mutations").getAbsolutePath}/*.graphql",
-    s"--schema=${(baseDirectory.value / "mutations.json").getAbsolutePath}",
-    "--namespace", namespace,
-    graphQLScala.getAbsolutePath
+    "apollo", "client:codegen", "--config", "tests/src/test/graphql/mutations", "--target", "scala", "--namespace", namespace, graphQLScala.getAbsolutePath
   ).!
 
   Seq(graphQLScala)
