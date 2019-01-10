@@ -25,7 +25,7 @@ class MutationComponentTest extends AsyncFunSuite {
 
     ReactDOM.render(
       ApolloProvider(
-        client = ApolloBoostClient(uri = "https://8v9r9kpn7q.lp.gql.zone/graphql")
+        client = ApolloBoostClient(uri = "https://graphql-todo-tracker.glitch.me")
       )(
         Mutation[TodoResult, Unit](gql(
           """mutation {
@@ -60,7 +60,7 @@ class MutationComponentTest extends AsyncFunSuite {
 
     ReactDOM.render(
       ApolloProvider(
-        client = ApolloBoostClient(uri = "https://8v9r9kpn7q.lp.gql.zone/graphql")
+        client = ApolloBoostClient(uri = "https://graphql-todo-tracker.glitch.me")
       )(
         Mutation[Unit, Unit](gql(
           """mutation {
@@ -98,7 +98,7 @@ class MutationComponentTest extends AsyncFunSuite {
 
     ReactDOM.render(
       ApolloProvider(
-        client = ApolloBoostClient(uri = "https://8v9r9kpn7q.lp.gql.zone/graphql")
+        client = ApolloBoostClient(uri = "https://graphql-todo-tracker.glitch.me")
       )(
         Mutation[TodoResult, Variables](gql(
           """mutation AddTodo($typ: String!) {
@@ -135,7 +135,7 @@ class MutationComponentTest extends AsyncFunSuite {
 
     ReactDOM.render(
       ApolloProvider(
-        client = ApolloBoostClient(uri = "https://8v9r9kpn7q.lp.gql.zone/graphql")
+        client = ApolloBoostClient(uri = "https://graphql-todo-tracker.glitch.me")
       )(
         Mutation[TodoResult, Variables](gql(
           """mutation AddTodo($typ: String!) {
@@ -166,7 +166,7 @@ class MutationComponentTest extends AsyncFunSuite {
 
     ReactDOM.render(
       ApolloProvider(
-        client = ApolloBoostClient(uri = "https://8v9r9kpn7q.lp.gql.zone/graphql")
+        client = ApolloBoostClient(uri = "https://graphql-todo-tracker.glitch.me")
       )(
         Mutation(AddTodoMutation) { (mut, res) =>
           if (res.data.isDefined) {

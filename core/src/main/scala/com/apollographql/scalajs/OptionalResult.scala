@@ -6,7 +6,7 @@ import scala.language.implicitConversions
 @js.native trait OptionalInput[T] extends js.Object
 object OptionalInput {
   implicit def fromValue[T](v: T): OptionalInput[T] = v.asInstanceOf[OptionalInput[T]]
-  implicit def fromOption[T](v: Option[T]): OptionalInput[T] = v.orNull.asInstanceOf[OptionalInput[T]]
+  implicit def fromOption[T](v: Option[T])(implicit ev: Null <:< T): OptionalInput[T] = v.orNull.asInstanceOf[OptionalInput[T]]
 }
 
 @js.native trait OptionalResult[T] extends js.Object

@@ -76,7 +76,7 @@ Mutation[MutationData, Variables](
 ```
 
 ## Automatic Mutation Types
-With `apollo`, we can automatically generate mutation objects that tie together GraphQL mutations with variables and response types based on the schema definition. First, make sure you have followed the [Apollo CLI Installation](./installation.html#Apollo-CLI) steps and downloaded a schema by following the [instructions](https://github.com/apollographql/apollo-cli#apollo-schemadownload-output). For this example, we will be using the GraphQL server at `https://8v9r9kpn7q.lp.gql.zone/graphql`.
+With `apollo`, we can automatically generate mutation objects that tie together GraphQL mutations with variables and response types based on the schema definition. First, make sure you have followed the [Apollo CLI Installation](./installation.html#Apollo-CLI) steps and downloaded a schema by following the [instructions](https://github.com/apollographql/apollo-cli#apollo-schemadownload-output). For this example, we will be using the GraphQL server at `https://graphql-todo-tracker.glitch.me`.
 
 With Apollo CLI installed, we can define our first mutation! Under `src/main/graphql`, you can define static mutation that will be converted to Scala code by Apollo CLI. For example, we could define a mutation `addtodo.graphql`:
 ```graphql

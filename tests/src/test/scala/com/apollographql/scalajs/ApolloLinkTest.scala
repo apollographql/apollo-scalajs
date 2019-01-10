@@ -15,7 +15,7 @@ class ApolloLinkTest extends AsyncFunSuite {
   test("Can perform a query with an HttpLink") {
     val resultPromise = Promise[Assertion]
     ApolloLink.execute(
-      new HttpLink(HttpLinkOptions("https://w5xlvm3vzz.lp.gql.zone/graphql")),
+      new HttpLink(HttpLinkOptions("https://graphql-currency-rates.glitch.me")),
       GraphQLRequest(
         gql(
           """{

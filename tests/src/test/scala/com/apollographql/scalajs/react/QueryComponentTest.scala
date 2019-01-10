@@ -20,7 +20,7 @@ class QueryComponentTest extends AsyncFunSuite {
     case class ResultShape(rates: Seq[js.Object])
     ReactDOM.render(
       ApolloProvider(
-        client = ApolloBoostClient(uri = "https://w5xlvm3vzz.lp.gql.zone/graphql")
+        client = ApolloBoostClient(uri = "https://graphql-currency-rates.glitch.me")
       )(
         Query[ResultShape](gql(
           """{
@@ -48,7 +48,7 @@ class QueryComponentTest extends AsyncFunSuite {
     case class Variables(cur: String)
     ReactDOM.render(
       ApolloProvider(
-        client = ApolloBoostClient(uri = "https://w5xlvm3vzz.lp.gql.zone/graphql")
+        client = ApolloBoostClient(uri = "https://graphql-currency-rates.glitch.me")
       )(
         Query[ResultShape, Variables](gql(
           """query GetRates($cur: String!) {
@@ -75,7 +75,7 @@ class QueryComponentTest extends AsyncFunSuite {
     case class ResultShape(rates: Seq[js.Object], bar: Seq[js.Object])
     ReactDOM.render(
       ApolloProvider(
-        client = ApolloBoostClient(uri = "https://w5xlvm3vzz.lp.gql.zone/graphql")
+        client = ApolloBoostClient(uri = "https://graphql-currency-rates.glitch.me")
       )(
         Query[ResultShape](gql(
           """{
@@ -105,7 +105,7 @@ class QueryComponentTest extends AsyncFunSuite {
     val gotDataPromise = Promise[Assertion]
     ReactDOM.render(
       ApolloProvider(
-        client = ApolloBoostClient(uri = "https://w5xlvm3vzz.lp.gql.zone/graphql")
+        client = ApolloBoostClient(uri = "https://graphql-currency-rates.glitch.me")
       )(
         Query(UsdRatesQuery) { d =>
           if (d.data.isDefined) {
@@ -125,7 +125,7 @@ class QueryComponentTest extends AsyncFunSuite {
     val gotDataPromise = Promise[Assertion]
     ReactDOM.render(
       ApolloProvider(
-        client = ApolloBoostClient(uri = "https://w5xlvm3vzz.lp.gql.zone/graphql")
+        client = ApolloBoostClient(uri = "https://graphql-currency-rates.glitch.me")
       )(
         Query(CurrencyRatesQuery, CurrencyRatesQuery.Variables("USD")) { d =>
           if (d.data.isDefined) {
@@ -145,7 +145,7 @@ class QueryComponentTest extends AsyncFunSuite {
     val didntLoadPromise = Promise[Assertion]
     ReactDOM.render(
       ApolloProvider(
-        client = ApolloBoostClient(uri = "https://w5xlvm3vzz.lp.gql.zone/graphql")
+        client = ApolloBoostClient(uri = "https://graphql-currency-rates.glitch.me")
       )(
         Query(CurrencyRatesQuery, CurrencyRatesQuery.Variables("USD"), ExtraQueryOptions(
           fetchPolicy = "cache-only"

@@ -60,7 +60,7 @@ Next, to initialize Apollo Client in your application, first create an instance 
 
 ```scala
 val client = ApolloBoostClient(
-  uri = "https://w5xlvm3vzz.lp.gql.zone/graphql"
+  uri = "https://graphql-currency-rates.glitch.me"
 )
 ```
 
