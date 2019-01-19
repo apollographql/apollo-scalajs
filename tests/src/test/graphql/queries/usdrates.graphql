@@ -1,5 +1,9 @@
+fragment CurrencyFragment on ExchangeRate {
+  currency
+}
+
 query USDRates {
   rates(currency: "USD") {
-    currency
+    ...CurrencyFragment
   }
 }

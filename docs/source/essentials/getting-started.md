@@ -14,7 +14,7 @@ import com.apollographql.scalajs._
 
 def main(): Unit = { // called when the app launches
   val client = ApolloBoostClient(
-    uri = "https://w5xlvm3vzz.lp.gql.zone/graphql"
+    uri = "https://graphql-currency-rates.glitch.me"
   )
 }
 ```

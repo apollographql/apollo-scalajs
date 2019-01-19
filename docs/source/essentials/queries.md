@@ -127,7 +127,7 @@ Query[QueryData, Variables](
 ```
 
 ## Automatic Query Types
-With `apollo`, we can automatically generate query objects that tie together GraphQL queries with response types based on the schema definition. First, make sure you have followed the [Apollo CLI Installation](./installation.html#Apollo-CLI) steps and downloaded a schema by following the [instructions](https://github.com/apollographql/apollo-cli#apollo-schemadownload-output). For this example, we will be using the GraphQL server at `https://w5xlvm3vzz.lp.gql.zone/graphql`.
+With `apollo`, we can automatically generate query objects that tie together GraphQL queries with response types based on the schema definition. First, make sure you have followed the [Apollo CLI Installation](./installation.html#Apollo-CLI) steps and downloaded a schema by following the [instructions](https://github.com/apollographql/apollo-cli#apollo-schemadownload-output). For this example, we will be using the GraphQL server at `https://graphql-currency-rates.glitch.me`.
 
 With Apollo CLI installed, we can define our first query! Under `src/main/graphql`, you can define static queries that will be converted to Scala code by Apollo CLI. For example, we could define a query `usdrates.graphql`:
 ```graphql

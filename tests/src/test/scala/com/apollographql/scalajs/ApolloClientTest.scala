@@ -19,20 +19,20 @@ class ApolloClientTest extends AsyncFunSuite {
 
   test("Can create an instance of Apollo Client") {
     assert(!js.isUndefined(new ApolloClient(ApolloClientOptions(
-      link = new HttpLink(HttpLinkOptions("https://w5xlvm3vzz.lp.gql.zone/graphql")),
+      link = new HttpLink(HttpLinkOptions("https://graphql-currency-rates.glitch.me")),
       cache = new InMemoryCache()
     ))))
   }
 
   test("Can create an instance of Apollo Client using Apollo Boost") {
     assert(!js.isUndefined(ApolloBoostClient(
-      uri = "https://w5xlvm3vzz.lp.gql.zone/graphql"
+      uri = "https://graphql-currency-rates.glitch.me"
     )))
   }
 
   test("Can perform a simple query and get the results") {
     ApolloBoostClient(
-      uri = "https://w5xlvm3vzz.lp.gql.zone/graphql"
+      uri = "https://graphql-currency-rates.glitch.me"
     ).query[js.Object](
       query = gql(
         """{
@@ -49,7 +49,7 @@ class ApolloClientTest extends AsyncFunSuite {
 
   test("Can perform a query with variables and get the results") {
     ApolloBoostClient(
-      uri = "https://w5xlvm3vzz.lp.gql.zone/graphql"
+      uri = "https://graphql-currency-rates.glitch.me"
     ).query[js.Object, js.Object](
       query = gql(
         """query GetRates($cur: String!) {
@@ -73,7 +73,7 @@ class ApolloClientTest extends AsyncFunSuite {
     case class QueryResult(rates: Seq[Rate])
 
     ApolloBoostClient(
-      uri = "https://w5xlvm3vzz.lp.gql.zone/graphql"
+      uri = "https://graphql-currency-rates.glitch.me"
     ).query[QueryResult, Variables](
       query = gql(
         """query GetRates($cur: String!) {

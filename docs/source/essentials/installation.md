@@ -41,14 +41,27 @@ val namespace = "com.my.package.graphql"
   out.mkdirs()
 
   Seq(
-    "apollo", "codegen:generate", s"--queries=${((sourceDirectory in Compile).value / "graphql").getAbsolutePath}/*.graphql",
-    s"--schema=${(baseDirectory.value / "schema.json").getAbsolutePath}",
-    "--namespace", namespace,
-    (out / "graphql.scala").getAbsolutePath
+    "apollo", "client:codegen",
+    "--config", "apollo.config.js",
+    "--target", "scala",
+    "--namespace", namespace, graphQLScala.getAbsolutePath
   ).!
 
   Seq(out / "graphql.scala")
 }
 
 watchSources ++= ((sourceDirectory in Compile).value / "graphql" ** "*.graphql").get
+```
+
+With the accompanying [`apollo.config.js`](https://www.apollographql.com/docs/references/apollo-config.html):
+```js
+module.exports = {
+  client: {
+    service: {
+      name: "test-schema",
+      localSchemaFile: "schema.json"
+    },
+    includes: [ "src/main/graphql/*.graphql" ]
+  }
+};
 ```

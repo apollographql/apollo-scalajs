@@ -22,7 +22,7 @@ class ReactApolloTest extends AsyncFunSuite {
     assert(!js.isUndefined(
       ReactDOM.render(
         ApolloProvider(
-          client = ApolloBoostClient(uri = "https://w5xlvm3vzz.lp.gql.zone/graphql")
+          client = ApolloBoostClient(uri = "https://graphql-currency-rates.glitch.me")
         )(
           div()
         ),
@@ -34,7 +34,7 @@ class ReactApolloTest extends AsyncFunSuite {
   test("Can server-side render data to string based on a query") {
     js.Dynamic.global.fetch = UnfetchFetch
 
-    val link = new HttpLink(options = HttpLinkOptions(uri = "https://w5xlvm3vzz.lp.gql.zone/graphql"))
+    val link = new HttpLink(options = HttpLinkOptions(uri = "https://graphql-currency-rates.glitch.me"))
     val cache = new InMemoryCache()
     val client = new ApolloClient(options = js.Dynamic.literal(ssrMode = true, link = link, cache = cache))
 

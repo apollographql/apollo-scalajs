@@ -5,19 +5,22 @@ import slinky.core.ExternalComponent
 import slinky.core.facade.ReactElement
 import slinky.readwrite.{Reader, Writer}
 
+import scala.util.Try
 import scala.scalajs.js
 import scala.scalajs.js.|
 
-case class QueryData[T](loading: Boolean, error: Option[Error], data: Option[T], refetch: () => Unit)
+case class QueryData[T](loading: Boolean, error: Option[js.Error], data: Option[T], refetch: () => Unit)
 object QueryData {
   implicit def reader[T](implicit tReader: Reader[T]): Reader[QueryData[T]] = { o =>
     val dyn = o.asInstanceOf[js.Dynamic]
     val loading = Reader.booleanReader.read(dyn.loading.asInstanceOf[js.Object])
-    val error = Reader.optionReader[Error].read(dyn.error.asInstanceOf[js.Object])
+    val error = Reader.optionReader[js.Error].read(dyn.error.asInstanceOf[js.Object])
     QueryData(
       loading,
       error,
-      if (loading || error.isDefined) None else Some(tReader.read(dyn.data.asInstanceOf[js.Object])),
+      if (js.Object.keys(dyn.data.asInstanceOf[js.Object]).nonEmpty) {
+        Some(tReader.read(dyn.data.asInstanceOf[js.Object]))
+      } else None,
       implicitly[Reader[() => Unit]].read(dyn.refetch.asInstanceOf[js.Object])
     )
   }
