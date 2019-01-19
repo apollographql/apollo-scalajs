@@ -6,7 +6,7 @@ branches:
 install:
   - . $HOME/.nvm/nvm.sh
   - nvm install stable
-  - npm install -g apollo@2.2.0
+  - npm install -g apollo@2.3.0
 script:
   - sbt tests/test
   - sbt ";set scalaJSStage in Global := FullOptStage; tests/test"
