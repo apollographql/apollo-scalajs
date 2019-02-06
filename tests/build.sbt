@@ -3,7 +3,7 @@ enablePlugins(ScalaJSBundlerPlugin)
 resolvers in Global += Resolver.sonatypeRepo("releases")
 
 libraryDependencies += "org.scalatest" %%% "scalatest" % "3.0.3" % Test
-libraryDependencies += "me.shadaj" %%% "slinky-web" % "0.5.0" % Test
+libraryDependencies += "me.shadaj" %%% "slinky-web" % "0.5.2" % Test
 
 npmDependencies in Test += "react" -> "16.5.2"
 npmDependencies in Test += "react-dom" -> "16.5.2"
