@@ -3,14 +3,14 @@ package com.apollographql.scalajs
 import scala.scalajs.js
 import scala.language.implicitConversions
 
-@js.native trait OptionalInput[T] extends js.Object
-object OptionalInput {
-  final def empty[T]: OptionalInput[T] = null.asInstanceOf[OptionalInput[T]]
-  implicit def fromValue[T](v: T): OptionalInput[T] = v.asInstanceOf[OptionalInput[T]]
-  implicit def fromOption[T](v: Option[T])(implicit ev: Null <:< T): OptionalInput[T] = v.orNull.asInstanceOf[OptionalInput[T]]
-}
+@js.native trait OptionalValue[T] extends js.Object
+object OptionalValue {
+  implicit class OptionalValueExt[T](private val optionalValue: OptionalValue[T]) extends AnyVal {
+    def toOption: Option[T] = Option(optionalValue.asInstanceOf[T])
+  }
 
-@js.native trait OptionalResult[T] extends js.Object
-object OptionalResult {
-  implicit def toOption[T](orig: OptionalResult[T]): Option[T] = Option(orig.asInstanceOf[T])
+  final def empty[T]: OptionalValue[T] = null.asInstanceOf[OptionalValue[T]]
+  implicit def toOption[T](v: OptionalValue[T]): Option[T] = v.toOption
+  implicit def fromValue[T](v: T): OptionalValue[T] = v.asInstanceOf[OptionalValue[T]]
+  implicit def fromOption[T](v: Option[T])(implicit ev: Null <:< T): OptionalValue[T] = v.orNull.asInstanceOf[OptionalValue[T]]
 }

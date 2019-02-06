@@ -10,7 +10,7 @@ import scala.language.implicitConversions
 import scala.scalajs.js
 import scala.scalajs.js.|
 
-case class MutationData[T](loading: Boolean, called: Boolean, error: Option[Error], data: Option[T])
+case class MutationData[T](loading: Boolean, called: Boolean, error: Option[js.Error], data: Option[T])
 object MutationData {
   implicit def reader[T](implicit tReader: Reader[T]): Reader[MutationData[T]] = { o =>
     val dyn = o.asInstanceOf[js.Dynamic]
@@ -18,7 +18,7 @@ object MutationData {
     MutationData(
       loading,
       Reader.booleanReader.read(dyn.called.asInstanceOf[js.Object]),
-      Reader.optionReader[Error].read(dyn.error.asInstanceOf[js.Object]),
+      Reader.optionReader[js.Error].read(dyn.error.asInstanceOf[js.Object]),
       if (loading) None else Reader.optionReader(tReader).read(dyn.data.asInstanceOf[js.Object])
     )
   }
