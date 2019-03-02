@@ -1,0 +1,5 @@
+query AllTodosId {
+    todos {
+        id
+    }
+}
