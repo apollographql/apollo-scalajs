@@ -1,16 +1,24 @@
 package com.apollographql.scalajs.react
 
-import com.apollographql.scalajs.{AddTodoMutation, ApolloBoostClient, UnfetchFetch, gql}
+import com.apollographql.scalajs.AddTodoMutation
+import com.apollographql.scalajs.AllTodosIdQuery
+import com.apollographql.scalajs.ApolloBoostClient
+import com.apollographql.scalajs.UnfetchFetch
+import com.apollographql.scalajs.gql
 import org.scalajs.dom.document
-import org.scalatest.{Assertion, AsyncFunSuite}
+import org.scalatest.Assertion
+import org.scalatest.AsyncFunSuite
+import org.scalatest.Matchers
 import slinky.web.ReactDOM
 import slinky.web.html.div
 
-import scala.concurrent.{Future, Promise}
+import scala.concurrent.Future
+import scala.concurrent.Promise
 import scala.scalajs.js
-import scala.util.{Failure, Success}
+import scala.util.Failure
+import scala.util.Success
 
-class MutationComponentTest extends AsyncFunSuite {
+class MutationComponentTest extends AsyncFunSuite with Matchers {
   js.Dynamic.global.fetch = UnfetchFetch
 
   implicit override def executionContext =
@@ -186,5 +194,47 @@ class MutationComponentTest extends AsyncFunSuite {
     callMutation()
 
     gotDataPromise.future
+  }
+
+  test("Can mount a Mutation component with refetchQueries and refreshes the query") {
+    val multipleCallPromise = Promise[Assertion]
+
+    var callMutation: () => Unit = null
+
+    var todoSizeAccumulator: Seq[Int] = Seq()
+
+    ReactDOM.render(
+      ApolloProvider(
+        client = ApolloBoostClient(uri = "https://graphql-todo-tracker.glitch.me")
+      )(
+        div(
+          Query(AllTodosIdQuery) { result =>
+
+            if(result.data.isDefined) {
+              val todos = result.data.get.todos.get.size
+              todoSizeAccumulator = todoSizeAccumulator :+ todos
+
+              // If the query has been called twice (i.e. refetch happened)
+              if (todoSizeAccumulator.size == 2) {
+                multipleCallPromise.success(todoSizeAccumulator.reverse.reduce(_ - _) shouldBe 1)
+              }
+            }
+
+            div()
+          },
+          Mutation(AddTodoMutation, UpdateStrategy(refetchQueries = Seq("AllTodosId"))) { (mut, res) =>
+            callMutation = () => {
+              mut(AddTodoMutation.Variables(typ = "refresh"))
+            }
+            div()
+          }
+        )
+      ),
+      document.createElement("div")
+    )
+
+    callMutation()
+
+    multipleCallPromise.future
   }
 }

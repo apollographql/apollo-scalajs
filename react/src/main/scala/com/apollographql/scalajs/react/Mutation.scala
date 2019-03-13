@@ -44,31 +44,31 @@ object CallMutationProps {
   }
 }
 
+case class UpdateStrategy(refetchQueries: Seq[String] = Seq())
 object Mutation extends ExternalComponent {
   case class Props(mutation: DocumentNode,
+                   refetchQueries: Seq[String],
                    children: (js.Object, js.Object) => ReactElement)
 
   def apply[T](query: DocumentNode)
               (children: (CallMutationProps[Unit] => Future[MutationResult[T]], MutationData[T]) => ReactElement)
               (implicit tReader: Reader[T]): slinky.core.BuildingComponent[Element, js.Object] = {
-    val queryDataReader = MutationData.reader(tReader)
-    apply(Props(
-      mutation = query,
-      children = (call, d) => {
-        children(
-          implicitly[Reader[CallMutationProps[Unit] => Future[MutationResult[T]]]].read(call),
-          queryDataReader.read(d)
-        )
-      }
-    ))
+    apply(query, UpdateStrategy())(children)
   }
 
   def apply[T, V](query: DocumentNode)
-              (children: (CallMutationProps[V] => Future[MutationResult[T]], MutationData[T]) => ReactElement)
-              (implicit tReader: Reader[T], vWriter: Writer[V]): slinky.core.BuildingComponent[Element, js.Object] = {
+                 (children: (CallMutationProps[V] => Future[MutationResult[T]], MutationData[T]) => ReactElement)
+                 (implicit tReader: Reader[T], vWriter: Writer[V]): slinky.core.BuildingComponent[Element, js.Object] = {
+    apply(query, UpdateStrategy())(children)
+  }
+
+  def apply[T, V](query: DocumentNode, updateStrategy: UpdateStrategy)
+                 (children: (CallMutationProps[V] => Future[MutationResult[T]], MutationData[T]) => ReactElement)
+                 (implicit tReader: Reader[T], vWriter: Writer[V]): slinky.core.BuildingComponent[Element, js.Object] = {
     val queryDataReader = MutationData.reader(tReader)
     apply(Props(
       mutation = query,
+      refetchQueries = updateStrategy.refetchQueries,
       children = (call, d) => {
         children(
           implicitly[Reader[CallMutationProps[V] => Future[MutationResult[T]]]].read(call),
@@ -79,15 +79,23 @@ object Mutation extends ExternalComponent {
   }
 
   def apply[Q <: GraphQLMutation](query: Q)
-                                 (children: (CallMutationProps[Q#Variables] => Future[MutationResult[query.Data]], MutationData[query.Data]) => ReactElement)
-                                 (implicit dataReader: Reader[query.Data],
+                                 (children: (CallMutationProps[Q#Variables] => Future[MutationResult[Q#Data]], MutationData[Q#Data]) => ReactElement)
+                                 (implicit dataReader: Reader[Q#Data],
+                                  variablesWriter: Writer[Q#Variables]): slinky.core.BuildingComponent[Element, js.Object] = {
+    apply(query: Q, UpdateStrategy())(children)
+  }
+
+  def apply[Q <: GraphQLMutation](query: Q, updateStrategy: UpdateStrategy)
+                                 (children: (CallMutationProps[Q#Variables] => Future[MutationResult[Q#Data]], MutationData[Q#Data]) => ReactElement)
+                                 (implicit dataReader: Reader[Q#Data],
                                   variablesWriter: Writer[Q#Variables]): slinky.core.BuildingComponent[Element, js.Object] = {
     val queryDataReader = MutationData.reader(dataReader)
     apply(Props(
       mutation = query.operation,
+      refetchQueries = updateStrategy.refetchQueries,
       children = (call, d) => {
         children(
-          implicitly[Reader[CallMutationProps[Q#Variables] => Future[MutationResult[query.Data]]]].read(call),
+          implicitly[Reader[CallMutationProps[Q#Variables] => Future[MutationResult[Q#Data]]]].read(call),
           queryDataReader.read(d)
         )
       }
