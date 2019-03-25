@@ -4,7 +4,6 @@ db.json
 *.log
 node_modules/
 public/*
-!public/_redirects
+.cache
 .deploy*/
 docs.json
-package-lock.json
