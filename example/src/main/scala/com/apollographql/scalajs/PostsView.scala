@@ -7,7 +7,7 @@ import slinky.core.facade.ReactElement
 import slinky.web.html._
 
 @react class PostsView extends StatelessComponent {
-  case class Props()
+  type Props = Unit
 
   def render(): ReactElement = {
     Query(AllPostsQuery) { res =>
@@ -20,7 +20,7 @@ import slinky.web.html._
               UpVote(post.id)
             )
           }
-        )
+        ): ReactElement
       }.getOrElse(h1("loading!"))
     }
   }

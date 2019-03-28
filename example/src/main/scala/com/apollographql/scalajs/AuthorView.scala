@@ -14,7 +14,7 @@ import slinky.web.html._
       _.data.map { d =>
         div(
           d.author.toString
-        )
+        ): ReactElement
       }.getOrElse(h1("loading!"))
     }
   }
