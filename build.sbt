@@ -1,6 +1,6 @@
 organization in ThisBuild := "com.apollographql"
 
-scalaVersion in ThisBuild := "2.12.6"
+scalaVersion in ThisBuild := "2.12.8"
 
 scalacOptions in ThisBuild ++= Seq("-feature", "-deprecation")
 
