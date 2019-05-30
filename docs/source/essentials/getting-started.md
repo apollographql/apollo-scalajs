@@ -36,7 +36,7 @@ client.query[js.Object](gql( // gql is a member of the com.apollographql.scalajs
 If you open up the console, you should see the result of your GraphQL query. Now, let's learn how to connect Apollo Scala.js to React so we can start building query components with React Apollo.
 
 ## Connecting your client to React
-To connect Apollo Client to React, you will need to use the `ApolloProvider` component, which can be found in the `com.apollographql.scalajs.react` package. For details on what the `ApolloProvider` component does, see the [React Apollo Docs](https://www.apollographql.com/docs/react/essentials/get-started.html#creating-provider). We suggest placing your `ApolloProvider` somewhere high in your app, above any places where you need to access GraphQL data.
+To connect Apollo Client to React, you will need to use the `ApolloProvider` component, which can be found in the `com.apollographql.scalajs.react` package. For details on what the `ApolloProvider` component does, see the [React Apollo Docs](https://www.apollographql.com/docs/react/essentials/get-started/#creating-provider). We suggest placing your `ApolloProvider` somewhere high in your app, above any places where you need to access GraphQL data.
 
 ```scala
 import com.apollographql.scalajs.react.ApolloProvider
@@ -78,5 +78,5 @@ If you include this component in your React tree, you should see your GraphQL qu
 
 ## Next steps
 Now that you’ve learned how to fetch data with Apollo Scala.js, you’re ready to dive deeper into creating more complex queries and mutations. After this section, we recommend moving onto:
-+ [Queries](/essentials/queries.html): Learn how to fetch queries with arguments and handle the results with static types
-+ [Mutations](/essentials/mutations.html): Learn how to update data with mutations and type your parameters and results
++ [Queries](/essentials/queries/): Learn how to fetch queries with arguments and handle the results with static types
++ [Mutations](/essentials/mutations/): Learn how to update data with mutations and type your parameters and results

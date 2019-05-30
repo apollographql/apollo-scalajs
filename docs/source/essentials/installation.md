@@ -4,6 +4,7 @@ order: 0
 ---
 
 Add the dependency to your `build.sbt`
+
 ```scala
 resolvers += "Apollo Bintray" at "https://dl.bintray.com/apollographql/maven/"
 libraryDependencies += "com.apollographql" %%% "apollo-scalajs-core" % "0.7.0"
@@ -14,6 +15,7 @@ If you are using the React API, you may want to add other Slinky modules such as
 
 ## NPM Dependencies
 If you are using [Scala.js Bundler](https://scalacenter.github.io/scalajs-bundler/), you will need to add the Apollo Client dependencies to your `build.sbt`.
+
 ```scala
 npmDependencies in Compile += "apollo-boost" -> "0.1.16"
 npmDependencies in Compile += "react-apollo" -> "2.2.2"
@@ -54,6 +56,7 @@ watchSources ++= ((sourceDirectory in Compile).value / "graphql" ** "*.graphql")
 ```
 
 With the accompanying [`apollo.config.js`](https://www.apollographql.com/docs/references/apollo-config.html):
+
 ```js
 module.exports = {
   client: {
