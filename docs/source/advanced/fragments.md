@@ -1,6 +1,6 @@
 ---
 title: Using Fragments
-order: 1
+description: ''
 ---
 
 Fragments are a powerful tool in statically-typed languages, allowing you to share a common model type across multiple queries in your application. Apollo Scala.js handles fragment types through implicit conversions between the original data type generated for a specific query and the fragment type that contains a specific subset of fields.
