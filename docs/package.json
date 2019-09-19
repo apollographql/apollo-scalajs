@@ -3,8 +3,8 @@
     "start": "gatsby develop"
   },
   "dependencies": {
-    "gatsby": "^2.14.0",
-    "gatsby-theme-apollo-docs": "^2.0.2",
+    "gatsby": "^2.15.18",
+    "gatsby-theme-apollo-docs": "^2.1.1",
     "react": "^16.9.0",
     "react-dom": "^16.9.0"
   }
