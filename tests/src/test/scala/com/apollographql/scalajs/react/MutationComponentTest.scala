@@ -19,7 +19,7 @@ import scala.util.Failure
 import scala.util.Success
 
 class MutationComponentTest extends AsyncFunSuite with Matchers {
-  js.Dynamic.global.fetch = UnfetchFetch
+  js.Dynamic.global.window.fetch = UnfetchFetch
 
   implicit override def executionContext =
     scala.concurrent.ExecutionContext.Implicits.global

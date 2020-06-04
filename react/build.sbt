@@ -2,6 +2,9 @@ enablePlugins(ScalaJSPlugin)
 
 name := "apollo-scalajs-react"
 
-libraryDependencies += "me.shadaj" %%% "slinky-core" % "0.6.0"
+libraryDependencies += "me.shadaj" %%% "slinky-core" % "0.6.5"
 
-addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.1" cross CrossVersion.full)
+scalacOptions ++= {
+  if (scalaJSVersion.startsWith("0.6.")) Seq("-P:scalajs:sjsDefinedByDefault")
+  else Nil
+}

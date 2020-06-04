@@ -12,7 +12,7 @@ import scala.scalajs.js.annotation.JSImport
 object UnfetchFetch extends js.Object
 
 class ApolloClientTest extends AsyncFunSuite {
-  js.Dynamic.global.fetch = UnfetchFetch
+  js.Dynamic.global.window.fetch = UnfetchFetch
 
   implicit override def executionContext =
     scala.concurrent.ExecutionContext.Implicits.global

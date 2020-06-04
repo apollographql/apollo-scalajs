@@ -1,12 +1,16 @@
-organization in ThisBuild := "com.apollographql"
+ThisBuild / organization := "com.apollographql"
 
-scalaVersion in ThisBuild := "2.12.8"
+val scala212 = "2.12.10"
+val scala213 = "2.13.1"
 
-scalacOptions in ThisBuild ++= Seq("-feature", "-deprecation")
+ThisBuild / crossScalaVersions := Seq(scala212, scala213)
+ThisBuild / scalaVersion := scala212
 
-licenses in ThisBuild += ("MIT", url("http://opensource.org/licenses/MIT"))
+ThisBuild / scalacOptions ++= Seq("-feature", "-deprecation")
 
-bintrayOrganization in ThisBuild := Some("apollographql")
+ThisBuild / licenses += ("MIT", url("http://opensource.org/licenses/MIT"))
+
+ThisBuild / bintrayOrganization := Some("apollographql")
 
 lazy val root = project.in(file(".")).withId("apollo-scalajs").aggregate(
   core, react
@@ -15,10 +19,22 @@ lazy val root = project.in(file(".")).withId("apollo-scalajs").aggregate(
   publishLocal := {}
 )
 
+lazy val macroAnnotationSettings = Seq(
+  resolvers += Resolver.sonatypeRepo("releases"),
+  scalacOptions ++= {
+    if (scalaVersion.value == scala213) Seq("-Ymacro-annotations")
+    else Seq.empty
+  },
+  libraryDependencies ++= {
+    if (scalaVersion.value == scala213) Seq.empty
+    else Seq(compilerPlugin(("org.scalamacros" % "paradise" % "2.1.1").cross(CrossVersion.full)))
+  }
+)
+
 lazy val core = project.enablePlugins(BintrayPlugin)
 
-lazy val react = project.dependsOn(core).enablePlugins(BintrayPlugin)
+lazy val react = project.dependsOn(core).settings(macroAnnotationSettings).enablePlugins(BintrayPlugin)
 
-lazy val tests = project.dependsOn(core, react)
+lazy val tests = project.dependsOn(core, react).settings(macroAnnotationSettings)
 
-lazy val example = project.dependsOn(core, react)
+lazy val example = project.dependsOn(core, react).settings(macroAnnotationSettings)
