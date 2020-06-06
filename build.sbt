@@ -12,6 +12,8 @@ ThisBuild / licenses += ("MIT", url("http://opensource.org/licenses/MIT"))
 
 ThisBuild / bintrayOrganization := Some("apollographql")
 
+ThisBuild / bintrayReleaseOnPublish := false
+
 lazy val root = project.in(file(".")).withId("apollo-scalajs").aggregate(
   core, react
 ).settings(

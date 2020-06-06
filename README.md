@@ -7,11 +7,11 @@ _use Apollo Client and React Apollo from your Scala.js apps!_
 Add the dependency to your build.sbt
 ```scala
 resolvers += "Apollo Bintray" at "https://dl.bintray.com/apollographql/maven/"
-libraryDependencies += "com.apollographql" %%% "apollo-scalajs-core" % "0.7.0" // if you are writing a vanilla Scala.js app
-libraryDependencies += "com.apollographql" %%% "apollo-scalajs-react" % "0.7.0" // if you are writing a React Scala.js app
+libraryDependencies += "com.apollographql" %%% "apollo-scalajs-core" % "0.7.1" // if you are writing a vanilla Scala.js app
+libraryDependencies += "com.apollographql" %%% "apollo-scalajs-react" % "0.7.1" // if you are writing a React Scala.js app
 ```
 
-You probably also want to add other Slinky modules such as the web module, so check out the instructions at https://slinky.shadaj.me
+You probably also want to add other Slinky modules such as the web module, so check out the instructions at https://slinky.dev
 
 To set up the code generator, which uses the Apollo CLI to generate static types for your GraphQL queries, first install `apollo`
 ```npm i -g apollo```
