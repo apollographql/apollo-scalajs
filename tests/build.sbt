@@ -1,30 +1,31 @@
 enablePlugins(ScalaJSBundlerPlugin)
 
-resolvers in Global += Resolver.sonatypeRepo("releases")
+libraryDependencies += "org.scalatest" %%% "scalatest" % "3.1.1" % Test
+libraryDependencies += "me.shadaj" %%% "slinky-web" % "0.6.5" % Test
 
-libraryDependencies += "org.scalatest" %%% "scalatest" % "3.0.3" % Test
-libraryDependencies += "me.shadaj" %%% "slinky-web" % "0.6.0" % Test
+Test / npmDependencies += "react" -> "16.8.4"
+Test / npmDependencies += "react-dom" -> "16.8.4"
 
-npmDependencies in Test += "react" -> "16.8.4"
-npmDependencies in Test += "react-dom" -> "16.8.4"
+Compile / npmDependencies += "apollo-boost" -> "0.1.16"
+Compile / npmDependencies += "react-apollo" -> "2.2.2"
+Compile / npmDependencies += "graphql-tag" -> "2.9.2"
+Compile / npmDependencies += "graphql" -> "14.0.2"
 
-npmDependencies in Compile += "apollo-boost" -> "0.1.16"
-npmDependencies in Compile += "react-apollo" -> "2.2.2"
-npmDependencies in Compile += "graphql-tag" -> "2.9.2"
-npmDependencies in Compile += "graphql" -> "14.0.2"
+Compile / npmDependencies += "unfetch" -> "2.1.1"
 
-npmDependencies in Compile += "unfetch" -> "2.1.1"
+Test / requireJsDomEnv := true
 
-jsDependencies += RuntimeDOM % Test
-
-scalacOptions += "-P:scalajs:sjsDefinedByDefault"
+scalacOptions ++= {
+  if (scalaJSVersion.startsWith("0.6.")) Seq("-P:scalajs:sjsDefinedByDefault")
+  else Nil
+}
 
 val namespace = "com.apollographql.scalajs"
 
-(sourceGenerators in Test) += Def.task {
+(Test / sourceGenerators) += Def.task {
   import scala.sys.process._
 
-  val out = (sourceManaged in Test).value
+  val out = (Test / sourceManaged).value
 
   out.mkdirs()
 
@@ -40,10 +41,10 @@ val namespace = "com.apollographql.scalajs"
   Seq(graphQLScala)
 }
 
-(sourceGenerators in Test) += Def.task {
+(Test / sourceGenerators) += Def.task {
   import scala.sys.process._
 
-  val out = (sourceManaged in Test).value
+  val out = (Test / sourceManaged).value
 
   out.mkdirs()
 
@@ -59,4 +60,11 @@ val namespace = "com.apollographql.scalajs"
   Seq(graphQLScala)
 }
 
-watchSources in Test ++= ((sourceDirectory in Test).value / "graphql" ** "*.graphql").get
+Test / watchSources ++= ((Test / sourceDirectory).value / "graphql" ** "*.graphql").get
+
+Test / scalacOptions ++= {
+  if (scalaJSVersion.startsWith("0.6.")) Seq("-P:scalajs:sjsDefinedByDefault")
+  else Nil
+}
+
+scalaJSLinkerConfig ~= { _.withESFeatures(_.withUseECMAScript2015(false)) }

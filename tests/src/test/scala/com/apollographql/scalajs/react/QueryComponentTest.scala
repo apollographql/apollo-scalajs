@@ -10,7 +10,7 @@ import scala.concurrent.Promise
 import scala.scalajs.js
 
 class QueryComponentTest extends AsyncFunSuite {
-  js.Dynamic.global.fetch = UnfetchFetch
+  js.Dynamic.global.window.fetch = UnfetchFetch
 
   implicit override def executionContext =
     scala.concurrent.ExecutionContext.Implicits.global

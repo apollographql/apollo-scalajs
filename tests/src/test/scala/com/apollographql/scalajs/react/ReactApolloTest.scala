@@ -13,7 +13,7 @@ import scala.scalajs.js
 import scala.scalajs.js.JSON
 
 class ReactApolloTest extends AsyncFunSuite {
-  js.Dynamic.global.fetch = UnfetchFetch
+  js.Dynamic.global.window.fetch = UnfetchFetch
 
   implicit override def executionContext =
     scala.concurrent.ExecutionContext.Implicits.global
@@ -32,8 +32,6 @@ class ReactApolloTest extends AsyncFunSuite {
   }
 
   test("Can server-side render data to string based on a query") {
-    js.Dynamic.global.fetch = UnfetchFetch
-
     val link = new HttpLink(options = HttpLinkOptions(uri = "https://graphql-currency-rates.glitch.me"))
     val cache = new InMemoryCache()
     val client = new ApolloClient(options = js.Dynamic.literal(ssrMode = true, link = link, cache = cache))

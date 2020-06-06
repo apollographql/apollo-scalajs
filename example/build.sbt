@@ -20,9 +20,10 @@ npmDevDependencies in Compile += "css-loader" -> "0.28.7"
 npmDevDependencies in Compile += "html-webpack-plugin" -> "2.30.1"
 npmDevDependencies in Compile += "copy-webpack-plugin" -> "4.2.0"
 
-scalacOptions += "-P:scalajs:sjsDefinedByDefault"
-
-addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
+scalacOptions ++= {
+  if (scalaJSVersion.startsWith("0.6.")) Seq("-P:scalajs:sjsDefinedByDefault")
+  else Nil
+}
 
 webpackConfigFile in fastOptJS := Some(baseDirectory.value / "webpack-fastopt.config.js")
 webpackConfigFile in fullOptJS := Some(baseDirectory.value / "webpack-opt.config.js")
