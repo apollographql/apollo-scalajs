@@ -2,28 +2,21 @@ enablePlugins(ScalaJSBundlerPlugin)
 
 name := "react-apollo-scalajs-example"
 
-libraryDependencies += "me.shadaj" %%% "slinky-web" % "0.6.0"
-libraryDependencies += "me.shadaj" %%% "slinky-hot" % "0.6.0"
+libraryDependencies += "me.shadaj" %%% "slinky-web" % "0.6.6"
+libraryDependencies += "me.shadaj" %%% "slinky-hot" % "0.6.6"
 
-npmDependencies in Compile += "react" -> "16.8.4"
-npmDependencies in Compile += "react-dom" -> "16.8.4"
+npmDependencies in Compile += "react" -> "16.14.0"
+npmDependencies in Compile += "react-dom" -> "16.14.0"
 npmDependencies in Compile += "react-proxy" -> "1.1.8"
 
-npmDependencies in Compile += "apollo-boost" -> "0.1.16"
-npmDependencies in Compile += "react-apollo" -> "2.2.2"
-npmDependencies in Compile += "graphql-tag" -> "2.9.2"
-npmDependencies in Compile += "graphql" -> "14.0.2"
+npmDependencies in Compile += "@apollo/client" -> "3.2.4"
 
+npmDevDependencies in Compile += "apollo" -> "2.31.0"
 npmDevDependencies in Compile += "file-loader" -> "1.1.5"
 npmDevDependencies in Compile += "style-loader" -> "0.19.0"
 npmDevDependencies in Compile += "css-loader" -> "0.28.7"
-npmDevDependencies in Compile += "html-webpack-plugin" -> "2.30.1"
-npmDevDependencies in Compile += "copy-webpack-plugin" -> "4.2.0"
-
-scalacOptions ++= {
-  if (scalaJSVersion.startsWith("0.6.")) Seq("-P:scalajs:sjsDefinedByDefault")
-  else Nil
-}
+npmDevDependencies in Compile += "html-webpack-plugin" -> "4.3.0"
+npmDevDependencies in Compile += "copy-webpack-plugin" -> "5.1.1"
 
 webpackConfigFile in fastOptJS := Some(baseDirectory.value / "webpack-fastopt.config.js")
 webpackConfigFile in fullOptJS := Some(baseDirectory.value / "webpack-opt.config.js")
@@ -45,9 +38,10 @@ val namespace = "com.apollographql.scalajs"
   val graphQLScala = out / "graphql.scala"
 
   Seq(
-    "apollo", "codegen:generate", s"--queries=${((sourceDirectory in Compile).value / "graphql").getAbsolutePath}/*.graphql",
-    s"--schema=${(baseDirectory.value / "schema.json").getAbsolutePath}",
-    "--namespace", namespace,
+    "apollo", "client:codegen", s"--queries=${((sourceDirectory in Compile).value / "graphql").getAbsolutePath}/*.graphql",
+    s"--localSchemaFile=${(baseDirectory.value / "schema.json").getAbsolutePath}",
+    "--target=scala",
+    s"--namespace=$namespace",
     graphQLScala.getAbsolutePath
   ).!
 

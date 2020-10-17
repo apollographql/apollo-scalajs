@@ -19,14 +19,14 @@ trait Operation extends js.Object {
   def toKey(): String = js.native
 }
 
-@JSImport("apollo-link", "ApolloLink")
+@JSImport("@apollo/client", "ApolloLink")
 @js.native
 class ApolloLink(handler: js.UndefOr[js.Function2[Operation, js.UndefOr[NextLink], Observable[FetchResult]]] = js.undefined) extends js.Object {
   def concat(next: ApolloLink | RequestHandler): ApolloLink = js.native
   def request(operation: Operation, forward: js.UndefOr[NextLink]): Observable[FetchResult] = js.native
 }
 
-@JSImport("apollo-link", "ApolloLink")
+@JSImport("@apollo/client", "ApolloLink")
 @js.native
 object ApolloLink extends js.Object {
   def empty(): ApolloLink = js.native

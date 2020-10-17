@@ -2,15 +2,17 @@ package com.apollographql.scalajs.react
 
 import com.apollographql.scalajs.cache.InMemoryCache
 import com.apollographql.scalajs.link.{HttpLink, HttpLinkOptions}
-import com.apollographql.scalajs.{ApolloBoostClient, ApolloClient, CurrencyRatesQuery, UnfetchFetch}
+import com.apollographql.scalajs.{ApolloClient, CurrencyRatesQuery, UnfetchFetch}
 import org.scalajs.dom.document
-import org.scalatest.{Assertion, AsyncFunSuite}
+import org.scalatest.funsuite.AsyncFunSuite
+import org.scalatest.Assertion
 import slinky.web.ReactDOM
 import slinky.web.html.div
 
 import scala.concurrent.Promise
 import scala.scalajs.js
 import scala.scalajs.js.JSON
+import com.apollographql.scalajs.ApolloClientOptions
 
 class ReactApolloTest extends AsyncFunSuite {
   js.Dynamic.global.window.fetch = UnfetchFetch
@@ -22,7 +24,12 @@ class ReactApolloTest extends AsyncFunSuite {
     assert(!js.isUndefined(
       ReactDOM.render(
         ApolloProvider(
-          client = ApolloBoostClient(uri = "https://graphql-currency-rates.glitch.me")
+          client = new ApolloClient(
+            ApolloClientOptions(
+              uri = "https://graphql-currency-rates.glitch.me",
+              cache = new InMemoryCache()
+            )
+          )
         )(
           div()
         ),
@@ -48,7 +55,7 @@ class ReactApolloTest extends AsyncFunSuite {
         }
       )
     ).toFuture.map { html =>
-      assert(html == """<div data-reactroot="">AED</div>""")
+      assert(html == """<div>AED</div>""")
     }
   }
 }

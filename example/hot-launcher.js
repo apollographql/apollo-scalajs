@@ -1,4 +1,4 @@
-require("./react-apollo-scalajs-example-fastopt.js").entrypoint.main();
+require("./react-apollo-scalajs-example-fastopt.js").main();
 
 if (module.hot) {
     module.hot.accept();

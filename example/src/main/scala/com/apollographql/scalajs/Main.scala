@@ -9,31 +9,32 @@ import org.scalajs.dom.{document, html}
 import scala.scalajs.js
 import scala.scalajs.js.annotation.JSExportTopLevel
 import scala.scalajs.LinkingInfo
+import com.apollographql.scalajs.cache.InMemoryCache
 
 object Main {
-  @JSExportTopLevel("entrypoint.main")
+  @JSExportTopLevel("main")
   def main(): Unit = {
     if (LinkingInfo.developmentMode) {
       hot.initialize()
     }
 
-    if (js.typeOf(js.Dynamic.global.reactContainer) == "undefined") {
-      js.Dynamic.global.reactContainer = document.createElement("div")
-      document.body.appendChild(js.Dynamic.global.reactContainer.asInstanceOf[html.Element])
+    if (js.typeOf(js.Dynamic.global.window.reactContainer) == "undefined") {
+      js.Dynamic.global.window.reactContainer = document.createElement("div")
+      document.body.appendChild(js.Dynamic.global.window.reactContainer.asInstanceOf[html.Element])
     }
 
-    val client = ApolloBoostClient(
-      uri = "https://1jzxrj179.lp.gql.zone/graphql"
+    val client = new ApolloClient(
+      ApolloClientOptions(
+        uri = "https://graphql-todo-tracker.glitch.me",
+        cache = new InMemoryCache()
+      )
     )
 
     ReactDOM.render(
       ApolloProvider(client)(
-        div(
-          PostsView(),
-          AuthorView(1)
-        )
+        TodosView()
       ),
-      js.Dynamic.global.reactContainer.asInstanceOf[html.Element]
+      js.Dynamic.global.window.reactContainer.asInstanceOf[html.Element]
     )
   }
 }

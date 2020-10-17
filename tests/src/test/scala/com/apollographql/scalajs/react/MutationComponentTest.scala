@@ -2,7 +2,6 @@ package com.apollographql.scalajs.react
 
 import com.apollographql.scalajs.AddTodoMutation
 import com.apollographql.scalajs.AllTodosIdQuery
-import com.apollographql.scalajs.ApolloBoostClient
 import com.apollographql.scalajs.UnfetchFetch
 import com.apollographql.scalajs.gql
 import org.scalajs.dom.document
@@ -17,6 +16,9 @@ import scala.concurrent.Promise
 import scala.scalajs.js
 import scala.util.Failure
 import scala.util.Success
+import com.apollographql.scalajs.ApolloClient
+import com.apollographql.scalajs.ApolloClientOptions
+import com.apollographql.scalajs.cache.InMemoryCache
 
 class MutationComponentTest extends AsyncFunSuite with Matchers {
   js.Dynamic.global.window.fetch = UnfetchFetch
@@ -33,7 +35,12 @@ class MutationComponentTest extends AsyncFunSuite with Matchers {
 
     ReactDOM.render(
       ApolloProvider(
-        client = ApolloBoostClient(uri = "https://graphql-todo-tracker.glitch.me")
+        client = new ApolloClient(
+            ApolloClientOptions(
+              uri = "https://graphql-todo-tracker.glitch.me",
+              cache = new InMemoryCache()
+            )
+          )
       )(
         Mutation[TodoResult, Unit](gql(
           """mutation {
@@ -68,7 +75,12 @@ class MutationComponentTest extends AsyncFunSuite with Matchers {
 
     ReactDOM.render(
       ApolloProvider(
-        client = ApolloBoostClient(uri = "https://graphql-todo-tracker.glitch.me")
+        client = new ApolloClient(
+            ApolloClientOptions(
+              uri = "https://graphql-todo-tracker.glitch.me",
+              cache = new InMemoryCache()
+            )
+          )
       )(
         Mutation[Unit, Unit](gql(
           """mutation {
@@ -106,7 +118,12 @@ class MutationComponentTest extends AsyncFunSuite with Matchers {
 
     ReactDOM.render(
       ApolloProvider(
-        client = ApolloBoostClient(uri = "https://graphql-todo-tracker.glitch.me")
+        client = new ApolloClient(
+            ApolloClientOptions(
+              uri = "https://graphql-todo-tracker.glitch.me",
+              cache = new InMemoryCache()
+            )
+          )
       )(
         Mutation[TodoResult, Variables](gql(
           """mutation AddTodo($typ: String!) {
@@ -143,7 +160,12 @@ class MutationComponentTest extends AsyncFunSuite with Matchers {
 
     ReactDOM.render(
       ApolloProvider(
-        client = ApolloBoostClient(uri = "https://graphql-todo-tracker.glitch.me")
+        client = new ApolloClient(
+            ApolloClientOptions(
+              uri = "https://graphql-todo-tracker.glitch.me",
+              cache = new InMemoryCache()
+            )
+          )
       )(
         Mutation[TodoResult, Variables](gql(
           """mutation AddTodo($typ: String!) {
@@ -174,7 +196,12 @@ class MutationComponentTest extends AsyncFunSuite with Matchers {
 
     ReactDOM.render(
       ApolloProvider(
-        client = ApolloBoostClient(uri = "https://graphql-todo-tracker.glitch.me")
+        client = new ApolloClient(
+            ApolloClientOptions(
+              uri = "https://graphql-todo-tracker.glitch.me",
+              cache = new InMemoryCache()
+            )
+          )
       )(
         Mutation(AddTodoMutation) { (mut, res) =>
           if (res.data.isDefined) {
@@ -205,7 +232,12 @@ class MutationComponentTest extends AsyncFunSuite with Matchers {
 
     ReactDOM.render(
       ApolloProvider(
-        client = ApolloBoostClient(uri = "https://graphql-todo-tracker.glitch.me")
+        client = new ApolloClient(
+            ApolloClientOptions(
+              uri = "https://graphql-todo-tracker.glitch.me",
+              cache = new InMemoryCache()
+            )
+          )
       )(
         div(
           Query(AllTodosIdQuery) { result =>
