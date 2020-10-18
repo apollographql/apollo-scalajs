@@ -1,7 +1,0 @@
-query AllPosts {
-  posts {
-    id
-    title
-    votes
-  }
-}

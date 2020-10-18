@@ -1,24 +1,18 @@
 enablePlugins(ScalaJSBundlerPlugin)
 
 libraryDependencies += "org.scalatest" %%% "scalatest" % "3.1.1" % Test
-libraryDependencies += "me.shadaj" %%% "slinky-web" % "0.6.5" % Test
+libraryDependencies += "me.shadaj" %%% "slinky-web" % "0.6.6" % Test
+
+npmDependencies in Compile += "@apollo/client" -> "3.2.4"
+
+npmDevDependencies in Compile += "apollo" -> "2.31.0"
 
 Test / npmDependencies += "react" -> "16.8.4"
 Test / npmDependencies += "react-dom" -> "16.8.4"
 
-Compile / npmDependencies += "apollo-boost" -> "0.1.16"
-Compile / npmDependencies += "react-apollo" -> "2.2.2"
-Compile / npmDependencies += "graphql-tag" -> "2.9.2"
-Compile / npmDependencies += "graphql" -> "14.0.2"
-
 Compile / npmDependencies += "unfetch" -> "2.1.1"
 
 Test / requireJsDomEnv := true
-
-scalacOptions ++= {
-  if (scalaJSVersion.startsWith("0.6.")) Seq("-P:scalajs:sjsDefinedByDefault")
-  else Nil
-}
 
 val namespace = "com.apollographql.scalajs"
 
@@ -61,10 +55,5 @@ val namespace = "com.apollographql.scalajs"
 }
 
 Test / watchSources ++= ((Test / sourceDirectory).value / "graphql" ** "*.graphql").get
-
-Test / scalacOptions ++= {
-  if (scalaJSVersion.startsWith("0.6.")) Seq("-P:scalajs:sjsDefinedByDefault")
-  else Nil
-}
 
 scalaJSLinkerConfig ~= { _.withESFeatures(_.withUseECMAScript2015(false)) }

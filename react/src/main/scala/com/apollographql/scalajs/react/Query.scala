@@ -8,6 +8,7 @@ import slinky.readwrite.{Reader, Writer}
 import scala.util.Try
 import scala.scalajs.js
 import scala.scalajs.js.|
+import scala.scalajs.js.annotation.JSImport
 
 case class QueryData[T](loading: Boolean, error: Option[js.Error], data: Option[T], refetch: () => Unit)
 object QueryData {
@@ -18,7 +19,7 @@ object QueryData {
     QueryData(
       loading,
       error,
-      if (js.Object.keys(dyn.data.asInstanceOf[js.Object]).nonEmpty) {
+      if (!js.isUndefined(dyn.data) && js.Object.keys(dyn.data.asInstanceOf[js.Object]).nonEmpty) {
         Some(tReader.read(dyn.data.asInstanceOf[js.Object]))
       } else None,
       implicitly[Reader[() => Unit]].read(dyn.refetch.asInstanceOf[js.Object])
@@ -139,5 +140,9 @@ object Query extends ExternalComponent {
     )(children)
   }
 
-  override val component: |[String, js.Object] = ReactApollo.Query
+  @js.native
+  @JSImport("@apollo/client/react/components", "Query")
+  object QueryComponent extends js.Object
+
+  override val component = QueryComponent
 }

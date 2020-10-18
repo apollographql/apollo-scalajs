@@ -9,6 +9,7 @@ import scala.concurrent.Future
 import scala.language.implicitConversions
 import scala.scalajs.js
 import scala.scalajs.js.|
+import scala.scalajs.js.annotation.JSImport
 
 case class MutationData[T](loading: Boolean, called: Boolean, error: Option[js.Error], data: Option[T])
 object MutationData {
@@ -106,5 +107,9 @@ object Mutation extends ExternalComponent {
     ))
   }
 
-  override val component: |[String, js.Object] = ReactApollo.Mutation
+  @js.native
+  @JSImport("@apollo/client/react/components", "Mutation")
+  object MutationComponent extends js.Object
+
+  override val component = MutationComponent
 }

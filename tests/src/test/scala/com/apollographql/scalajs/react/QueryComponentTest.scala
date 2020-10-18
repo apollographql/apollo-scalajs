@@ -8,6 +8,7 @@ import slinky.web.html.div
 
 import scala.concurrent.Promise
 import scala.scalajs.js
+import com.apollographql.scalajs.cache.InMemoryCache
 
 class QueryComponentTest extends AsyncFunSuite {
   js.Dynamic.global.window.fetch = UnfetchFetch
@@ -20,7 +21,12 @@ class QueryComponentTest extends AsyncFunSuite {
     case class ResultShape(rates: Seq[js.Object])
     ReactDOM.render(
       ApolloProvider(
-        client = ApolloBoostClient(uri = "https://graphql-currency-rates.glitch.me")
+        client = new ApolloClient(
+            ApolloClientOptions(
+              uri = "https://graphql-currency-rates.glitch.me",
+              cache = new InMemoryCache()
+            )
+          )
       )(
         Query[ResultShape](gql(
           """{
@@ -48,7 +54,12 @@ class QueryComponentTest extends AsyncFunSuite {
     case class Variables(cur: String)
     ReactDOM.render(
       ApolloProvider(
-        client = ApolloBoostClient(uri = "https://graphql-currency-rates.glitch.me")
+        client = new ApolloClient(
+            ApolloClientOptions(
+              uri = "https://graphql-currency-rates.glitch.me",
+              cache = new InMemoryCache()
+            )
+          )
       )(
         Query[ResultShape, Variables](gql(
           """query GetRates($cur: String!) {
@@ -75,7 +86,12 @@ class QueryComponentTest extends AsyncFunSuite {
     case class ResultShape(rates: Seq[js.Object], bar: Seq[js.Object])
     ReactDOM.render(
       ApolloProvider(
-        client = ApolloBoostClient(uri = "https://graphql-currency-rates.glitch.me")
+        client = new ApolloClient(
+            ApolloClientOptions(
+              uri = "https://graphql-currency-rates.glitch.me",
+              cache = new InMemoryCache()
+            )
+          )
       )(
         Query[ResultShape](gql(
           """{
@@ -105,7 +121,12 @@ class QueryComponentTest extends AsyncFunSuite {
     val gotDataPromise = Promise[Assertion]
     ReactDOM.render(
       ApolloProvider(
-        client = ApolloBoostClient(uri = "https://graphql-currency-rates.glitch.me")
+        client = new ApolloClient(
+            ApolloClientOptions(
+              uri = "https://graphql-currency-rates.glitch.me",
+              cache = new InMemoryCache()
+            )
+          )
       )(
         Query(UsdRatesQuery) { d =>
           if (d.data.isDefined) {
@@ -125,7 +146,12 @@ class QueryComponentTest extends AsyncFunSuite {
     val gotDataPromise = Promise[Assertion]
     ReactDOM.render(
       ApolloProvider(
-        client = ApolloBoostClient(uri = "https://graphql-currency-rates.glitch.me")
+        client = new ApolloClient(
+            ApolloClientOptions(
+              uri = "https://graphql-currency-rates.glitch.me",
+              cache = new InMemoryCache()
+            )
+          )
       )(
         Query(CurrencyRatesQuery, CurrencyRatesQuery.Variables("USD")) { d =>
           if (d.data.isDefined) {
@@ -145,12 +171,20 @@ class QueryComponentTest extends AsyncFunSuite {
     val didntLoadPromise = Promise[Assertion]
     ReactDOM.render(
       ApolloProvider(
-        client = ApolloBoostClient(uri = "https://graphql-currency-rates.glitch.me")
+        client = new ApolloClient(
+            ApolloClientOptions(
+              uri = "https://this-does-not-exists.com",
+              cache = new InMemoryCache()
+            )
+          )
       )(
         Query(CurrencyRatesQuery, CurrencyRatesQuery.Variables("USD"), ExtraQueryOptions(
           fetchPolicy = "cache-only"
         )) { d =>
-          didntLoadPromise.trySuccess(assert(!d.loading))
+          // TODO: Check if this is the intended behavior
+          if (!d.loading && d.error.isEmpty) {
+            didntLoadPromise.trySuccess(assert(true))
+          }
 
           div()
         }

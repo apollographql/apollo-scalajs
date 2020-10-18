@@ -1,0 +1,13 @@
+	query AllTodos {
+    todos {
+      id
+      typ: type
+    }
+  }
+  
+mutation AddTodo($typ: String!) {
+  addTodo(type: $typ) {
+    id
+    typ: type
+  }
+}

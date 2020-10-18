@@ -7,6 +7,6 @@ import scala.scalajs.js.annotation.JSImport
 
 case class HttpLinkOptions(uri: String)
 
-@JSImport("apollo-link-http", "HttpLink")
+@JSImport("@apollo/client", "HttpLink")
 @js.native
 class HttpLink(options: ObjectOrWritten[HttpLinkOptions]) extends ApolloLink

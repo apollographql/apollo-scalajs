@@ -12,6 +12,6 @@ trait CacheResolverContext extends js.Object {
 
 case class InMemoryCacheOptions(cacheRedirects: js.UndefOr[js.Dictionary[js.Dictionary[CacheResolver]]] = js.undefined)
 
-@JSImport("apollo-cache-inmemory", "InMemoryCache")
+@JSImport("@apollo/client/cache", "InMemoryCache")
 @js.native
 class InMemoryCache(options: js.UndefOr[ObjectOrWritten[InMemoryCacheOptions]] = js.undefined) extends ApolloCache

@@ -29,10 +29,11 @@ val namespace = "your package here"
   out.mkdirs()
 
   Seq(
-    "apollo", "codegen:generate", s"--queries=${((sourceDirectory in Compile).value / "graphql").getAbsolutePath}/*.graphql",
-    s"--schema=${(baseDirectory.value / "schema.json").getAbsolutePath}",
-    "--namespace", namespace,
-    (out / "graphql.scala").getAbsolutePath
+    "apollo", "client:codegen", s"--queries=${((sourceDirectory in Compile).value / "graphql").getAbsolutePath}/*.graphql",
+    s"--localSchemaFile=${(baseDirectory.value / "schema.json").getAbsolutePath}",
+    "--target=scala",
+    s"--namespace=$namespace",
+    graphQLScala.getAbsolutePath
   ).!
 
   Seq(out / "graphql.scala")

@@ -6,16 +6,20 @@ import scala.scalajs.js
 import scala.scalajs.js.annotation.JSImport
 
 @js.native
-@JSImport("react-apollo", JSImport.Namespace)
+@JSImport("@apollo/client/react/components", JSImport.Namespace)
 object ReactApollo extends js.Object {
-  val ApolloProvider: js.Object = js.native
   val Query: js.Object = js.native
   val Mutation: js.Object = js.native
 }
 
+@js.native
+@JSImport("@apollo/client", JSImport.Namespace)
+object TopLevelReactApollo extends js.Object {
+  val ApolloProvider: js.Object = js.native
+}
 
 @js.native
-@JSImport("react-apollo/renderToStringWithData.js", JSImport.Namespace)
+@JSImport("@apollo/client/react/ssr", JSImport.Namespace)
 object ReactApolloServer extends js.Object {
   def renderToStringWithData(component: ReactElement): js.Promise[String] = js.native
 }

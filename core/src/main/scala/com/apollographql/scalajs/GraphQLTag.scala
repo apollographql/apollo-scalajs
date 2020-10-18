@@ -7,7 +7,7 @@ import scala.scalajs.js.annotation.JSImport
 trait DocumentNode extends js.Object
 
 @js.native
-@JSImport("graphql-tag", JSImport.Default)
+@JSImport("@apollo/client", "gql")
 object gql extends js.Object {
   def apply(query: String): DocumentNode = js.native
 }

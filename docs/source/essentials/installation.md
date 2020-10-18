@@ -17,10 +17,7 @@ If you are using the React API, you may want to add other Slinky modules such as
 If you are using [Scala.js Bundler](https://scalacenter.github.io/scalajs-bundler/), you will need to add the Apollo Client dependencies to your `build.sbt`.
 
 ```scala
-npmDependencies in Compile += "apollo-boost" -> "0.1.16"
-npmDependencies in Compile += "react-apollo" -> "2.2.2"
-npmDependencies in Compile += "graphql-tag" -> "2.9.2"
-npmDependencies in Compile += "graphql" -> "14.0.2"
+npmDependencies in Compile += "@apollo/client" -> "3.2.4"
 ```
 
 ## Apollo CLI
