@@ -6,8 +6,8 @@ import com.apollographql.scalajs.UnfetchFetch
 import com.apollographql.scalajs.gql
 import org.scalajs.dom.document
 import org.scalatest.Assertion
-import org.scalatest.AsyncFunSuite
-import org.scalatest.Matchers
+import org.scalatest.funsuite.AsyncFunSuite
+import org.scalatest.matchers.should.Matchers
 import slinky.web.ReactDOM
 import slinky.web.html.div
 
@@ -26,10 +26,16 @@ class MutationComponentTest extends AsyncFunSuite with Matchers {
   implicit override def executionContext =
     scala.concurrent.ExecutionContext.Implicits.global
 
+  trait Todo extends js.Object {
+    val typ: String
+  }
+
+  trait TodoResult extends js.Object {
+    val addTodo: Todo
+  }
+
   test("Can mount a Mutation component and call the mutation") {
     val gotDataPromise = Promise[Assertion]
-    case class Todo(typ: String)
-    case class TodoResult(addTodo: Todo)
 
     var callMutation: () => Unit = null
 
@@ -54,7 +60,7 @@ class MutationComponentTest extends AsyncFunSuite with Matchers {
           }
 
           callMutation = () => {
-            mut()
+            mut(())
           }
 
           div()
@@ -91,7 +97,7 @@ class MutationComponentTest extends AsyncFunSuite with Matchers {
         )) { (mut, d) =>
           if (!ranMutation) {
             ranMutation = true
-            mut().andThen {
+            mut(()).andThen {
               case Success(_) =>
                 gotFailurePromise.failure(new Exception("Succeeded when it shouldn't have"))
               case Failure(_) =>
@@ -110,9 +116,6 @@ class MutationComponentTest extends AsyncFunSuite with Matchers {
 
   test("Can mount a Mutation component and call the mutation with variables") {
     val gotDataPromise = Promise[Assertion]
-    case class Todo(typ: String)
-    case class TodoResult(addTodo: Todo)
-    case class Variables(typ: String)
 
     var callMutation: () => Unit = null
 
@@ -125,7 +128,7 @@ class MutationComponentTest extends AsyncFunSuite with Matchers {
             )
           )
       )(
-        Mutation[TodoResult, Variables](gql(
+        Mutation[TodoResult, js.Object](gql(
           """mutation AddTodo($typ: String!) {
             |  addTodo(type: $typ) {
             |    typ: type
@@ -137,7 +140,7 @@ class MutationComponentTest extends AsyncFunSuite with Matchers {
           }
 
           callMutation = () => {
-            mut(Variables(typ = "bar"))
+            mut(js.Dynamic.literal(typ = "bar"))
           }
 
           div()
@@ -152,10 +155,6 @@ class MutationComponentTest extends AsyncFunSuite with Matchers {
   }
 
   test("Can mount a Mutation component, call the mutation, and get the result from the future") {
-    case class Todo(typ: String)
-    case class TodoResult(addTodo: Todo)
-    case class Variables(typ: String)
-
     var resultFuture: Future[Assertion] = null
 
     ReactDOM.render(
@@ -167,7 +166,7 @@ class MutationComponentTest extends AsyncFunSuite with Matchers {
             )
           )
       )(
-        Mutation[TodoResult, Variables](gql(
+        Mutation[TodoResult, js.Object](gql(
           """mutation AddTodo($typ: String!) {
             |  addTodo(type: $typ) {
             |    typ: type
@@ -175,8 +174,8 @@ class MutationComponentTest extends AsyncFunSuite with Matchers {
             |}""".stripMargin
         )) { (mut, _) =>
           if (resultFuture == null) {
-            resultFuture = mut(Variables(typ = "bar")).map { d =>
-              assert(d.data.addTodo.typ == "bar")
+            resultFuture = mut(js.Dynamic.literal(typ = "bar")).map { d =>
+              assert(d.data.get.addTodo.typ == "bar")
             }
           }
 

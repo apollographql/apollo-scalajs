@@ -1,13 +1,23 @@
 package com.apollographql.scalajs.link
 
 import com.apollographql.scalajs.DocumentNode
-import slinky.readwrite.ObjectOrWritten
 
 import scala.scalajs.js
 import scala.scalajs.js.annotation.JSImport
 import scala.scalajs.js.|
 
-case class GraphQLRequest(query: DocumentNode)
+@js.native
+trait GraphQLRequest extends js.Object {
+  val query: DocumentNode = js.native
+}
+
+object GraphQLRequest {
+  def apply(query: DocumentNode): GraphQLRequest = {
+    js.Dynamic.literal(
+      query = query
+    ).asInstanceOf[GraphQLRequest]
+  }
+}
 
 @js.native
 trait FetchResult extends js.Object
@@ -32,5 +42,5 @@ object ApolloLink extends js.Object {
   def empty(): ApolloLink = js.native
   def from(links: js.Array[ApolloLink]): ApolloLink = js.native
   def concat(first: ApolloLink, second: ApolloLink): ApolloLink = js.native
-  def execute(link: ApolloLink, operation: ObjectOrWritten[GraphQLRequest]): Observable[FetchResult] = js.native
+  def execute(link: ApolloLink, operation: GraphQLRequest): Observable[FetchResult] = js.native
 }

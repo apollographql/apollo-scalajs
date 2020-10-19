@@ -41,7 +41,7 @@ class ReactApolloTest extends AsyncFunSuite {
   test("Can server-side render data to string based on a query") {
     val link = new HttpLink(options = HttpLinkOptions(uri = "https://graphql-currency-rates.glitch.me"))
     val cache = new InMemoryCache()
-    val client = new ApolloClient(options = js.Dynamic.literal(ssrMode = true, link = link, cache = cache))
+    val client = new ApolloClient(options = ApolloClientOptions(ssrMode = true, link = link, cache = cache))
 
     ReactApolloServer.renderToStringWithData(
       ApolloProvider(ApolloProvider.Props(client = client))(

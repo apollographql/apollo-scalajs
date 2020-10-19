@@ -1,7 +1,5 @@
 package com.apollographql.scalajs.link
 
-import slinky.readwrite.ObjectOrWritten
-
 import scala.scalajs.js
 import scala.scalajs.js.annotation.JSImport
 
@@ -22,9 +20,9 @@ trait Subscription extends js.Object {
 @JSImport("apollo-link", "Observable")
 @js.native
 class Observable[T](subscriber: Subscriber[T]) extends js.Object {
-  def subscribe(observerOrNext: ObjectOrWritten[T => Unit],
-                error: ObjectOrWritten[js.UndefOr[js.Any => Unit]] = js.undefined,
-                complete: ObjectOrWritten[js.UndefOr[() => Unit]] = js.undefined): Subscription = js.native
+  def subscribe(observerOrNext: js.Function1[T, Unit],
+                error: js.UndefOr[js.Function1[T, Unit]] = js.undefined,
+                complete: js.UndefOr[js.Function0[Unit]] = js.undefined): Subscription = js.native
   def subscribe(observer: SubscriptionObserver[T]): Subscription = js.native
 
   def forEach(fn: js.Function1[T, Unit]): js.Promise[Unit] = js.native

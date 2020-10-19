@@ -25,16 +25,6 @@ object MutationData {
   }
 }
 
-case class MutationResult[T](data: T)
-object MutationResult {
-  implicit def reader[T](implicit tReader: Reader[T]): Reader[MutationResult[T]] = { o =>
-    val dyn = o.asInstanceOf[js.Dynamic]
-    MutationResult(
-      tReader.read(dyn.data.asInstanceOf[js.Object])
-    )
-  }
-}
-
 case class CallMutationProps[V](variables: V)
 object CallMutationProps {
   implicit def vToCall[V](value: V): CallMutationProps[V] = CallMutationProps(value)
