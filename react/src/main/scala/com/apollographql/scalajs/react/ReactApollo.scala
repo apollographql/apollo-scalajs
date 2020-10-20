@@ -13,12 +13,6 @@ object ReactApollo extends js.Object {
 }
 
 @js.native
-@JSImport("@apollo/client", JSImport.Namespace)
-object TopLevelReactApollo extends js.Object {
-  val ApolloProvider: js.Object = js.native
-}
-
-@js.native
 @JSImport("@apollo/client/react/ssr", JSImport.Namespace)
 object ReactApolloServer extends js.Object {
   def renderToStringWithData(component: ReactElement): js.Promise[String] = js.native

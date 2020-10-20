@@ -34,15 +34,17 @@ class ApolloClientTest extends AsyncFunSuite {
           uri = "https://graphql-currency-rates.glitch.me",
           cache = new InMemoryCache()
         )
-    ).query[js.Object](
-      query = gql(
-        """{
-          |  rates(currency: "USD") {
-          |    currency
-          |  }
-          |}""".stripMargin
+    ).query[js.Object, js.Object](
+      QueryOptions(
+        gql(
+          """{
+            |  rates(currency: "USD") {
+            |    currency
+            |  }
+            |}""".stripMargin
+        )
       )
-    ).map { r =>
+    ).toFuture.map { r =>
       assert(r.data.asInstanceOf[js.Dynamic]
         .rates.asInstanceOf[js.Array[js.Object]].length > 0)
     }
@@ -55,26 +57,36 @@ class ApolloClientTest extends AsyncFunSuite {
           cache = new InMemoryCache()
         )
     ).query[js.Object, js.Object](
-      query = gql(
-        """query GetRates($cur: String!) {
-          |  rates(currency: $cur) {
-          |    currency
-          |  }
-          |}""".stripMargin
-      ),
-      variables = js.Dynamic.literal(
-        cur = "USD"
+      QueryOptions(
+        gql(
+          """query GetRates($cur: String!) {
+            |  rates(currency: $cur) {
+            |    currency
+            |  }
+            |}""".stripMargin
+        ),
+        variables = js.Dynamic.literal(
+          cur = "USD"
+        )
       )
-    ).map { r =>
+    ).toFuture.map { r =>
       assert(r.data.asInstanceOf[js.Dynamic]
         .rates.asInstanceOf[js.Array[js.Object]].length > 0)
     }
   }
 
   test("Can perform a query with typed variables and response and get the results") {
-    case class Variables(cur: String)
-    case class Rate(currency: String)
-    case class QueryResult(rates: Seq[Rate])
+    trait Variables extends js.Object {
+      val cur: String
+    }
+
+    trait Rate extends js.Object{
+      val currency: String
+    }
+    
+    trait QueryResult extends js.Object {
+      val rates: js.Array[Rate]
+    }
 
     new ApolloClient(
         ApolloClientOptions(
@@ -82,18 +94,20 @@ class ApolloClientTest extends AsyncFunSuite {
           cache = new InMemoryCache()
         )
     ).query[QueryResult, Variables](
-      query = gql(
-        """query GetRates($cur: String!) {
-          |  rates(currency: $cur) {
-          |    currency
-          |  }
-          |}""".stripMargin
-      ),
-      variables = Variables(
-        cur = "USD"
+      QueryOptions(
+        query = gql(
+          """query GetRates($cur: String!) {
+            |  rates(currency: $cur) {
+            |    currency
+            |  }
+            |}""".stripMargin
+        ),
+        variables = new Variables {
+          override val cur = "USD"
+        }
       )
-    ).map { r =>
-      assert(r.data.rates.nonEmpty)
+    ).toFuture.map { r =>
+      assert(r.data.get.rates.nonEmpty)
     }
   }
 }

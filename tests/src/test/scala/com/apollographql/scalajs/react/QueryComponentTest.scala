@@ -2,7 +2,8 @@ package com.apollographql.scalajs.react
 
 import com.apollographql.scalajs._
 import org.scalajs.dom.document
-import org.scalatest.{Assertion, AsyncFunSuite}
+import org.scalatest.funsuite.AsyncFunSuite
+import org.scalatest.Assertion
 import slinky.web.ReactDOM
 import slinky.web.html.div
 
