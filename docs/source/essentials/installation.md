@@ -18,16 +18,11 @@ If you are using [Scala.js Bundler](https://scalacenter.github.io/scalajs-bundle
 
 ```scala
 npmDependencies in Compile += "@apollo/client" -> "3.2.4"
+npmDevDependencies in Compile += "apollo" -> "2.31.0"
 ```
 
-## Apollo CLI
-To set up the code generator, which generates static types based on your GraphQL queries, first install the Apollo CLI.
-
-```bash
-npm install -g apollo
-```
-
-Then, you can configure SBT to automatically run it and add the resulting Scala sources to your build.
+## Code Generator
+You can configure SBT to automatically run the code generator and add the resulting Scala sources to your build.
 
 ```scala
 val namespace = "com.my.package.graphql"
@@ -36,17 +31,18 @@ val namespace = "com.my.package.graphql"
   import scala.sys.process._
 
   val out = (sourceManaged in Compile).value
+  val graphQLScala = out / "graphql.scala"
 
   out.mkdirs()
 
   Seq(
-    "apollo", "client:codegen",
+    "npx", "apollo", "client:codegen",
     "--config", "apollo.config.js",
     "--target", "scala",
     "--namespace", namespace, graphQLScala.getAbsolutePath
   ).!
 
-  Seq(out / "graphql.scala")
+  Seq(graphQLScala)
 }
 
 watchSources ++= ((sourceDirectory in Compile).value / "graphql" ** "*.graphql").get
