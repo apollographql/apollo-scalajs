@@ -4,7 +4,7 @@
     "start": "gatsby develop"
   },
   "dependencies": {
-    "gatsby": "^2.21.0",
+    "gatsby": "^5.9.0",
     "gatsby-theme-apollo-docs": "^4.2.0",
     "react": "^16.9.0",
     "react-dom": "^16.9.0"
