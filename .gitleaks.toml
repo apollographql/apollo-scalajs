@@ -6,3 +6,12 @@
             "5926b555e4866ebe8daf80408adbd5743ef2a2ab",
             
         ]
+
+[[ rules ]]
+    id = "generic-api-key"
+    [ rules.allowlist ]
+        commits = [
+            # The same secret as was showing up above appeared in a differnet signature
+            # This is a defunct API key for algolia docsearch
+            "5926b555e4866ebe8daf80408adbd5743ef2a2ab"
+        ]
