@@ -1,4 +1,5 @@
 enablePlugins(ScalaJSBundlerPlugin)
+useYarn := true
 
 name := "react-apollo-scalajs-example"
 
@@ -38,7 +39,7 @@ val namespace = "com.apollographql.scalajs"
   val graphQLScala = out / "graphql.scala"
 
   Seq(
-    "apollo", "client:codegen", s"--queries=${((sourceDirectory in Compile).value / "graphql").getAbsolutePath}/*.graphql",
+    "npx", "apollo", "client:codegen", s"--queries=${((sourceDirectory in Compile).value / "graphql").getAbsolutePath}/*.graphql",
     s"--localSchemaFile=${(baseDirectory.value / "schema.json").getAbsolutePath}",
     "--target=scala",
     s"--namespace=$namespace",
